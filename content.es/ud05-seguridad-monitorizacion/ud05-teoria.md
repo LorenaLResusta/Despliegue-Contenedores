@@ -54,6 +54,8 @@ Cada capa protege a la de dentro: un código perfecto no sirve si la API del cl�
 
 ## 2. Cadena de suministro de imágenes
 
+{{< relacion "mantenimiento" "ud04-backup-actualizaciones/ud04-teoria/#72-vulnerabilidades-cve-sbom-y-escáneres|UD04 · Vulnerabilidades en producción" >}}
+
 ```mermaid
 flowchart LR
     A[Código +<br/>dependencias] --> B[Construcción<br/>CI]
@@ -97,6 +99,8 @@ flowchart LR
 ---
 
 ## 4. Control de acceso: autenticación y RBAC
+
+{{< relacion "mantenimiento" "ud03-extraccion-datos/ud03-teoria/#4-accesos-al-sistema|UD03 · Accesos fallidos y fuerza bruta" >}}
 
 ### 4.1 Autenticación
 
@@ -166,6 +170,8 @@ Para reglas más finas (solo imágenes del registro propio, etiquetas obligatori
 
 ## 6. Políticas de red
 
+{{< relacion "mantenimiento" "ud01-monitorizacion-alarmas/ud01-teoria/#72-reglas-de-protección|UD01 · Proteger la monitorización" >}}
+
 Por defecto, en Kubernetes **todo Pod puede hablar con todo Pod**. Una **NetworkPolicy** selecciona Pods por etiquetas y define qué tráfico de entrada (*ingress*) y salida (*egress*) se les permite. En cuanto un Pod está seleccionado por alguna política de un tipo, **todo lo no permitido de ese tipo se deniega**.
 
 Patrón recomendado:
@@ -190,6 +196,8 @@ Recuerda que **las aplica el CNI** (Calico, Cilium); en el curso, el clúster ku
 
 ## 7. Gestión de secretos
 
+{{< relacion "mantenimiento" "ud04-backup-actualizaciones/ud04-teoria/#2-qué-hay-que-copiar-en-un-sistema-de-contenedores|UD04 · Secretos en las copias" >}}
+
 | Nivel | Medida |
 |---|---|
 | Básico | Secrets de Kubernetes, nunca en imágenes ni en Git; RBAC que limite quién los lee |
@@ -208,6 +216,8 @@ Recuerda que **las aplica el CNI** (Calico, Cilium); en el curso, el clúster ku
 | **Trazas** | ¿Por dónde ha pasado esta petición y cuánto tardó en cada servicio? | OpenTelemetry, Jaeger, Tempo |
 
 ### 8.1 Prometheus
+
+{{< relacion "mantenimiento" "ud01-monitorizacion-alarmas/ud01-teoria/#1-qué-significa-monitorizar-un-sistema-de-contenedores|UD01 · Monitorización y alarmas" "ud02-validacion-sistema/ud02-teoria/#3-del-acuerdo-de-nivel-de-servicio-a-los-indicadores|UD02 · SLO e indicadores" >}}
 
 ```mermaid
 flowchart LR
@@ -254,6 +264,8 @@ spec:
 
 ### 8.2 Registros centralizados
 
+{{< relacion "mantenimiento" "ud03-extraccion-datos/ud03-teoria/#2-centralizar-con-loki-y-alloy|UD03 · Loki y Alloy" >}}
+
 En Kubernetes los contenedores escriben en **stdout/stderr**; el *runtime* lo guarda en `/var/log/containers/` de cada nodo. Al borrarse el Pod (o el nodo), se pierden: hay que **recogerlos y centralizarlos**.
 
 | Pila | Recolector (DaemonSet) | Almacén | Interfaz | Notas |
@@ -270,6 +282,8 @@ En el laboratorio se usa **Fluent Bit + Loki + Grafana**, porque la pila EFK nec
 ---
 
 ## 9. Alta disponibilidad y tolerancia a fallos
+
+{{< relacion "mantenimiento" "ud04-backup-actualizaciones/ud04-teoria/#1-rpo-rto-y-política-de-copias|UD04 · RPO, RTO y copias" >}}
 
 | Capa | Punto único de fallo | Medida |
 |---|---|---|

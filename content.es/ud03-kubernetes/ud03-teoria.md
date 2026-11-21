@@ -322,6 +322,8 @@ Si cambias un ConfigMap, los ficheros montados como volumen se actualizan solos 
 
 ### 8.1 Sondas (*probes*)
 
+{{< relacion "mantenimiento" "ud03-extraccion-datos/ud03-teoria/#5-fallos-y-reinicios-de-la-aplicación|UD03 · Diagnóstico de reinicios" >}}
+
 | Sonda | Pregunta | Si falla |
 |---|---|---|
 | **startupProbe** | ¿Ha terminado de arrancar? | Se reintenta; mientras, no se ejecutan las otras |
@@ -334,6 +336,8 @@ Tipos: `httpGet`, `tcpSocket`, `exec` y `grpc`.
 > La sonda de **liveness** debe comprobar solo el propio proceso, **no sus dependencias**. Si comprueba la base de datos y esta cae, Kubernetes reiniciará todas las réplicas de la API a la vez y empeorará el problema. Las dependencias van en la **readiness**. En BiciAlacant, `/api/info` (liveness) no toca la base de datos y `/api/salud` (readiness) sí.
 
 ### 8.2 *Requests* y *limits*
+
+{{< relacion "mantenimiento" "ud02-validacion-sistema/ud02-teoria/#4-indicadores-con-promql|UD02 · Indicadores de capacidad" "ud03-extraccion-datos/ud03-teoria/#6-rendimiento-de-nodos-y-contenedores|UD03 · Rendimiento de nodos y contenedores" >}}
 
 ```yaml
 resources:
@@ -357,6 +361,8 @@ resources:
 ---
 
 ## 9. Actualizaciones y vuelta atrás
+
+{{< relacion "mantenimiento" "ud04-backup-actualizaciones/ud04-teoria/#8-actualizar-sin-perder-datos|UD04 · Actualizar sin perder datos" >}}
 
 | Estrategia | Cómo | Corte | Nativa |
 |---|---|:-:|:-:|
@@ -382,6 +388,8 @@ kubectl rollout pause|resume deployment/api
 
 ## 10. Escalado
 
+{{< relacion "mantenimiento" "ud02-validacion-sistema/ud02-teoria/#62-pruebas-de-estrés-y-punto-de-rotura|UD02 · Pruebas de estrés y autoescalado" >}}
+
 | Tipo | Qué escala | Herramienta |
 |---|---|---|
 | Manual | Réplicas | `kubectl scale deployment/api --replicas=5` |
@@ -397,6 +405,8 @@ Un **PodDisruptionBudget** (PDB) garantiza un mínimo de réplicas durante las i
 ---
 
 ## 11. Empaquetado: Helm y Kustomize
+
+{{< relacion "mantenimiento" "ud01-monitorizacion-alarmas/ud01-teoria/#2-cómo-llegan-los-datos-el-modelo-pull-de-prometheus|UD01 · Instalar la monitorización con Helm" >}}
 
 Cuando una aplicación tiene 10 manifiestos y tres entornos (desarrollo, pruebas, producción), copiar YAML no escala.
 

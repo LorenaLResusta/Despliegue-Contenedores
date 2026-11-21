@@ -1,6 +1,6 @@
 # Configuración del sitio Hugo de los apuntes de Despliegue de plataformas de contenedores
 # En GitHub Pages la Action sobrescribe baseURL con la URL real del sitio.
-baseURL = "https://lorenalresusta.github.io/Contenedores/"
+baseURL = "https://lorenalresusta.github.io/Despliegue-Contenedores/"
 locale = "es-es"
 title = "Despliegue de contenedores · Docker y Kubernetes"
 theme = "hugo-book"
@@ -23,7 +23,13 @@ defaultContentLanguage = "es"
   BookComments = false
   BookPortableLinks = 'warning'
   BookDateFormat = '02/01/2006'
-  BookRepo = 'https://github.com/LorenaLResusta/Contenedores'
+  BookRepo = 'https://github.com/LorenaLResusta/Despliegue-Contenedores'
+
+  # Enlaces entre los dos módulos del curso de especialización y al portal de FP (shortcode relacion)
+  [params.modulos]
+    despliegue = "https://lorenalresusta.github.io/Despliegue-Contenedores/"
+    mantenimiento = "https://lorenalresusta.github.io/Mantenimiento-Contenedores/"
+    portal = "https://lorenalresusta.github.io/FP/"
 
 [markup]
   [markup.goldmark.renderer]

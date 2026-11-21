@@ -197,6 +197,8 @@ El objeto Ingress solo **describe** las reglas; hace falta un **controlador** qu
 
 ### 4.2 Gateway API
 
+{{< relacion "mantenimiento" "ud03-extraccion-datos/ud03-teoria/#41-fuerza-bruta-detectar-y-bloquear|UD03 · La IP del cliente detrás del proxy" >}}
+
 Es la evolución de Ingress, diseñada por roles y extensible:
 
 ```mermaid
@@ -271,6 +273,8 @@ Viven lo que vive el **Pod** (sobreviven a reinicios del contenedor, no al borra
 
 ### 6.2 Volúmenes persistentes: PV, PVC y StorageClass
 
+{{< relacion "mantenimiento" "ud04-backup-actualizaciones/ud04-teoria/#21-copia-lógica-frente-a-copia-de-volumen|UD04 · Copias de los volúmenes" >}}
+
 ```mermaid
 flowchart LR
     P[Pod] -->|usa| PVC[PersistentVolumeClaim<br/>«quiero 1 Gi RWO<br/>de clase nfs»<br/>lo pide la aplicación]
@@ -299,6 +303,8 @@ spec:
 ```
 
 ### 6.3 Modos de acceso y política de recuperación
+
+{{< relacion "mantenimiento" "ud05-terminacion/ud05-teoria/#2-lo-que-sobrevive-a-kubectl-delete|UD05 · Lo que sobrevive a un borrado" >}}
 
 | Modo | Significado | Ejemplos |
 |---|---|---|

@@ -132,6 +132,8 @@ Además, se reducen sus **privilegios** con *capabilities*, *seccomp* y LSM (App
 
 ## 4. Namespaces: lo que el proceso ve
 
+{{< relacion "mantenimiento" "ud03-extraccion-datos/ud03-teoria/#52-volcados-ver-qué-hacía-el-proceso|UD03 · Depurar un proceso con kubectl debug" >}}
+
 Un *namespace* envuelve un recurso global del sistema para que los procesos de dentro crean que tienen su propia instancia aislada.
 
 | Namespace | Aísla | Efecto en un contenedor |
@@ -194,6 +196,8 @@ El UID 0 del contenedor se corresponde con el UID 1000 (`alumno`) y los UID 1-65
 ---
 
 ## 5. cgroups: lo que el proceso puede usar
+
+{{< relacion "mantenimiento" "ud03-extraccion-datos/ud03-teoria/#5-fallos-y-reinicios-de-la-aplicación|UD03 · OOMKilled y reinicios" >}}
 
 Los **grupos de control** organizan los procesos en una jerarquía y aplican a cada grupo límites, prioridades y contabilidad de recursos. Debian 13 usa **cgroups v2** (jerarquía unificada) montada en `/sys/fs/cgroup`.
 

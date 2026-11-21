@@ -192,6 +192,8 @@ stateDiagram-v2
 
 ### 3.3 Depuración
 
+{{< relacion "mantenimiento" "ud03-extraccion-datos/ud03-teoria/#1-registros-en-un-sistema-de-contenedores|UD03 · Registros en producción" >}}
+
 Un contenedor que no arranca se diagnostica siempre en el mismo orden:
 
 1. `docker ps -a` → estado y **código de salida** (`Exited (1)`, `Exited (137)` = matado por `SIGKILL`/OOM, `Exited (127)` = orden no encontrada).
@@ -219,6 +221,8 @@ registro.local:5000/bicialacant/api:1.2.0@sha256:4f3c...
 > **No uses `latest` en producción.** Hoy puede ser la 1.2 y mañana la 2.0 con cambios incompatibles. Fija la versión (`nginx:1.29-alpine`) o, para máxima reproducibilidad, el digest.
 
 ### 4.2 Estrategia de etiquetado
+
+{{< relacion "mantenimiento" "ud04-backup-actualizaciones/ud04-teoria/#71-versiones-semánticas-y-etiquetas|UD04 · Versiones y etiquetas al actualizar" >}}
 
 Con **versionado semántico** (MAYOR.MENOR.PARCHE) se publican varias etiquetas que apuntan a la misma imagen:
 
@@ -391,6 +395,8 @@ volumes:
 ---
 
 ## 7. Configuración y secretos
+
+{{< relacion "mantenimiento" "ud04-backup-actualizaciones/ud04-teoria/#2-qué-hay-que-copiar-en-un-sistema-de-contenedores|UD04 · Qué copiar (secretos incluidos)" >}}
 
 La **misma imagen** debe servir para desarrollo, pruebas y producción. Lo que cambia entre entornos se inyecta al ejecutar:
 

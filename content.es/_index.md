@@ -8,6 +8,10 @@ bookToc: true
 
 Apuntes y prácticas del curso **Despliegue de plataformas de ejecución de contenedores: instalación y gestión**, curso **2026/27**. El objetivo es que sepas **planificar, instalar, configurar y administrar** entornos basados en contenedores (Docker, Podman, containerd) y en orquestadores (Kubernetes), y que los dejes listos para producción: con red, almacenamiento persistente, seguridad, monitorización y alta disponibilidad.
 
+
+> [!NOTE]
+> Este módulo forma parte del curso de especialización junto con [Mantenimiento del sistema de contenedores desplegado (5169)](https://lorenalresusta.github.io/Mantenimiento-Contenedores/). La [relación entre los dos módulos](/guia/relacion-modulos/) enlaza cada concepto con el otro, y el [portal de FP](https://lorenalresusta.github.io/FP/) reúne todas las asignaturas por ciclo.
+
 | Característica | Valor |
 |---|---|
 | **Duración** | **120 horas** (≈ 37 h de teoría y 83 h de prácticas) |
