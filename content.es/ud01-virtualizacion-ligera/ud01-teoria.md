@@ -12,6 +12,12 @@ Una empresa quiere ejecutar veinte aplicaciones en el mismo servidor sin que una
 
 {{< ra "RA1:a,b,c,d,e,f,g" >}}
 
+
+{{< figura src="ud01/vm-vs-contenedor.svg" alt="Máquina virtual frente a contenedor" caption="Una VM lleva su propio sistema operativo completo; el contenedor comparte el núcleo del anfitrión." >}}
+
+> [!TIP]
+> **Desde cero.** una **máquina virtual** es como alquilar un piso entero —con su cocina y su baño— para cada inquilino; un **contenedor** es como una habitación en un piso compartido: cada uno tiene su espacio, pero la cocina (el núcleo del sistema) es común. Por eso el contenedor ocupa y arranca muchísimo más rápido.
+
 ### Objetivos de aprendizaje
 
 - Distinguir virtualización completa, paravirtualización y virtualización a nivel de sistema operativo.
@@ -349,6 +355,8 @@ flowchart LR
 | Usar `--privileged` «para que funcione» | No identificar la capacidad que falta | Añadir solo esa capacidad con `--cap-add` |
 | Esperar que `memory.max` reserve memoria | Confundir límite con reserva | Planificar con *requests* en Kubernetes |
 
+{{< figura src="ud01/anatomia-contenedor.svg" alt="Namespaces, cgroups y capas" caption="Lo que ve (namespaces), lo que usa (cgroups) y sus ficheros (capas): eso convierte un proceso en un contenedor." >}}
+
 ## 11. Resumen
 
 - Un contenedor es **un proceso aislado** que comparte el núcleo del anfitrión.
@@ -393,6 +401,16 @@ flowchart LR
   answer: 1
   explain: "Un contenedor privilegiado puede montar discos del anfitrión o cargar módulos: el aislamiento prácticamente desaparece."
 {{< /quiz >}}
+
+## Vídeos y recursos para aprender desde cero
+
+{{< recurso tipo="Vídeo" titulo="¿Qué es Docker? Contenedores vs máquinas virtuales" autor="Pelado Nerd · YouTube (español)" url="https://www.youtube.com/results?search_query=pelado+nerd+que+es+docker+contenedores" desc="Explicación visual y amena de por qué existen los contenedores." >}}
+{{< recurso tipo="Vídeo" titulo="Contenedores explicados con animaciones" autor="TechWorld with Nana · YouTube" url="https://www.youtube.com/results?search_query=techworld+nana+what+is+docker+container" desc="Dibujos claros de namespaces, imágenes y contenedores (en inglés con subtítulos)." >}}
+{{< recurso tipo="Interactivo" titulo="Play with Docker: prueba contenedores en el navegador" autor="Docker · labs.play-with-docker.com" url="https://labs.play-with-docker.com/" desc="Un laboratorio gratuito, sin instalar nada, para tocar tus primeros contenedores." >}}
+{{< recurso tipo="Docs" titulo="¿Qué es un contenedor? (documentación oficial)" autor="Docker Docs" url="https://docs.docker.com/get-started/docker-overview/" desc="La referencia oficial, breve y al grano." >}}
+
+> Los enlaces de vídeo abren una búsqueda en YouTube con el autor recomendado: elige el resultado más reciente y claro. Prioriza siempre vídeos de los últimos años, porque las herramientas cambian.
+
 
 ## Referencias
 

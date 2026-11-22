@@ -12,6 +12,12 @@ Un **orquestador** gestiona contenedores en un **conjunto de máquinas** como si
 
 {{< ra "RA4:a,b,c,d,e,f,g,h,i" >}}
 
+
+{{< figura src="ud03/estado-deseado.svg" alt="Estado deseado frente a estado real" caption="Declaras cuántas réplicas quieres; Kubernetes trabaja sin parar para que la realidad coincida." >}}
+
+> [!TIP]
+> **Desde cero.** si Docker es cocinar un plato en tu cocina, **Kubernetes** es dirigir la cocina de un restaurante con varios fogones (los nodos): tú escribes el menú —lo que quieres— y el jefe de cocina se encarga de que siempre haya el número de platos pedidos, aunque se estropee un fogón.
+
 ### Objetivos de aprendizaje
 
 - Describir los componentes del plano de control y de los nodos y su función.
@@ -501,6 +507,16 @@ kustomize/
   answer: 1
   explain: "Helm tiene versiones de *release* con upgrade y rollback; Kustomize está integrado en kubectl (`apply -k`)."
 {{< /quiz >}}
+
+## Vídeos y recursos para aprender desde cero
+
+{{< recurso tipo="Vídeo" titulo="Curso de Kubernetes desde cero" autor="Pelado Nerd · YouTube (español)" url="https://www.youtube.com/results?search_query=pelado+nerd+curso+kubernetes" desc="La serie más recomendada en español para empezar con K8s." >}}
+{{< recurso tipo="Vídeo" titulo="Kubernetes explicado en 1 hora" autor="TechWorld with Nana · YouTube" url="https://www.youtube.com/results?search_query=techworld+nana+kubernetes+tutorial" desc="Visión general animada de todos los componentes (inglés con subtítulos)." >}}
+{{< recurso tipo="Interactivo" titulo="Escenarios de Kubernetes en el navegador" autor="Killercoda" url="https://killercoda.com/playgrounds/scenario/kubernetes" desc="Un clúster real, gratis y sin instalar nada, para practicar kubectl." >}}
+{{< recurso tipo="Docs" titulo="Tutoriales oficiales de Kubernetes (en español)" autor="kubernetes.io" url="https://kubernetes.io/es/docs/tutorials/" desc="Incluye «Kubernetes Básico», un recorrido interactivo guiado." >}}
+
+> Los enlaces de vídeo abren una búsqueda en YouTube con el autor recomendado: elige el resultado más reciente y claro. Prioriza siempre vídeos de los últimos años, porque las herramientas cambian.
+
 
 ## Referencias
 

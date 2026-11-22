@@ -12,6 +12,12 @@ Los contenedores son efímeros y sus direcciones IP cambian cada vez que se recr
 
 {{< ra "RA5:a,b,c,d,e,f,g,h" >}}
 
+
+{{< figura src="ud04/service.svg" alt="Un Service da nombre e IP estables a Pods que cambian" caption="El Service reparte el tráfico solo entre los Pods que están listos." >}}
+
+> [!TIP]
+> **Desde cero.** los contenedores cambian de sitio y de dirección constantemente. Un **Service** es como el número de teléfono fijo de una empresa: llamas siempre al mismo número y la centralita te pasa con quien esté libre, aunque las personas cambien de mesa. Y un **volumen** es el almacén que no se tira cuando cambias de empleado.
+
 ### Objetivos de aprendizaje
 
 - Elegir el *driver* de red de Docker adecuado y usar el DNS interno.
@@ -391,6 +397,16 @@ spec:
   answer: 1
   explain: "Con Delete el provisionador elimina el volumen real. Para datos críticos: Retain y copias."
 {{< /quiz >}}
+
+## Vídeos y recursos para aprender desde cero
+
+{{< recurso tipo="Vídeo" titulo="Redes y Services en Kubernetes" autor="Pelado Nerd · YouTube (español)" url="https://www.youtube.com/results?search_query=pelado+nerd+kubernetes+services+networking" desc="Cómo se comunican los Pods y cómo se exponen al exterior." >}}
+{{< recurso tipo="Vídeo" titulo="Volúmenes y almacenamiento en Docker" autor="Pelado Nerd · YouTube (español)" url="https://www.youtube.com/results?search_query=pelado+nerd+docker+volumenes" desc="Dónde viven los datos cuando el contenedor desaparece." >}}
+{{< recurso tipo="Docs" titulo="Servicios, balanceo y redes (oficial)" autor="kubernetes.io" url="https://kubernetes.io/es/docs/concepts/services-networking/" desc="La referencia de Services, Ingress y el modelo de red." >}}
+{{< recurso tipo="Docs" titulo="Gateway API" autor="SIG Network · Kubernetes" url="https://gateway-api.sigs.k8s.io/" desc="La forma recomendada de enrutar HTTP/HTTPS que usamos en la unidad." >}}
+
+> Los enlaces de vídeo abren una búsqueda en YouTube con el autor recomendado: elige el resultado más reciente y claro. Prioriza siempre vídeos de los últimos años, porque las herramientas cambian.
+
 
 ## Referencias
 

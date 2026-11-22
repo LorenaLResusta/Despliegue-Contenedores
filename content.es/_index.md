@@ -57,6 +57,15 @@ Cada unidad tiene una página de **teoría** (conceptos, diagramas, ejemplos y a
 
 ● contribución principal · ○ contribución secundaria. El detalle por criterio está en [Resultados de aprendizaje y criterios de evaluación](/guia/ra-ce/).
 
+## Empieza aquí: aprender desde cero
+
+¿No habías tocado nunca un contenedor? Empieza por estos recursos y vuelve a ellos siempre que una unidad se te atasque. Cada unidad tiene además, al final de su teoría, sus propios vídeos y prácticas guiadas.
+
+{{< recurso tipo="Vídeo" titulo="Curso de Docker completo, en español" autor="Pelado Nerd · YouTube" url="https://www.youtube.com/results?search_query=pelado+nerd+curso+docker+completo" desc="El punto de partida más recomendado: de la primera imagen a Docker Compose, explicado con calma." >}}
+{{< recurso tipo="Interactivo" titulo="Play with Docker: contenedores en el navegador" autor="Docker · labs.play-with-docker.com" url="https://labs.play-with-docker.com/" desc="Un laboratorio gratuito para practicar sin instalar nada en tu equipo." >}}
+{{< recurso tipo="Interactivo" titulo="Killercoda: clústeres de Kubernetes de prueba" autor="killercoda.com" url="https://killercoda.com/" desc="Clústeres reales y temporales para practicar kubectl paso a paso." >}}
+{{< recurso tipo="Docs" titulo="Guía oficial «Get started» de Docker" autor="Docker Docs" url="https://docs.docker.com/get-started/" desc="Documentación clara y al grano para los primeros pasos." >}}
+
 ## Cómo leer estos apuntes
 
 > [!TIP]

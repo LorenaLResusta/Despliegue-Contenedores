@@ -12,6 +12,12 @@ En la UD01 creaste un contenedor a mano con media docena de órdenes del núcleo
 
 {{< ra "RA2:a,b,c,d,e,f,g" "RA3:a,b,c,d,e,f,g,h" >}}
 
+
+{{< figura src="ud02/imagen-contenedor.svg" alt="De la imagen en capas al contenedor" caption="La imagen son capas de solo lectura; el contenedor añade una capa escribible que se pierde al borrarlo." >}}
+
+> [!TIP]
+> **Desde cero.** una **imagen** es la receta congelada de tu aplicación (código + dependencias); un **contenedor** es el plato ya cocinado a partir de esa receta. Un **registro** como Docker Hub es el recetario compartido del que descargas y al que subes recetas.
+
 ### Objetivos de aprendizaje
 
 - Elegir e instalar un motor (Docker Engine, Podman, containerd) desde fuentes oficiales.
@@ -469,6 +475,16 @@ Muchas imágenes oficiales aceptan la variante `_FILE` de sus variables: `POSTGR
   answer: 1
   explain: "Los secretos se inyectan al ejecutar (secretos de Compose, Secrets de Kubernetes), nunca en la imagen."
 {{< /quiz >}}
+
+## Vídeos y recursos para aprender desde cero
+
+{{< recurso tipo="Vídeo" titulo="Imágenes y Dockerfile paso a paso" autor="Pelado Nerd · YouTube (español)" url="https://www.youtube.com/results?search_query=pelado+nerd+dockerfile+imagenes" desc="Cómo se construye una imagen y por qué el orden de las capas importa." >}}
+{{< recurso tipo="Vídeo" titulo="Docker Compose desde cero" autor="Fazt / HolaMundo · YouTube (español)" url="https://www.youtube.com/results?search_query=docker+compose+desde+cero+español" desc="Levantar varios servicios con un solo fichero." >}}
+{{< recurso tipo="Interactivo" titulo="Tutorial oficial «Getting started»" autor="Docker Docs" url="https://docs.docker.com/get-started/" desc="Construye y publica tu primera imagen siguiendo pasos guiados." >}}
+{{< recurso tipo="Docs" titulo="Buenas prácticas para escribir un Dockerfile" autor="Docker Docs" url="https://docs.docker.com/build/building/best-practices/" desc="La lista oficial de buenas prácticas que seguimos en la unidad." >}}
+
+> Los enlaces de vídeo abren una búsqueda en YouTube con el autor recomendado: elige el resultado más reciente y claro. Prioriza siempre vídeos de los últimos años, porque las herramientas cambian.
+
 
 ## Referencias
 
