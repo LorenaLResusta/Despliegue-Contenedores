@@ -6,12 +6,12 @@ bookToc: true
 
 # Relación entre Despliegue y Mantenimiento
 
-El curso de especialización en **Despliegue de productos software en contenedores** tiene dos módulos que trabajan sobre la **misma aplicación**, BiciAlacant, con dos papeles distintos:
+El curso de especialización en **Despliegue de productos software en contenedores** tiene dos módulos que trabajan sobre la **misma aplicación**, MiTienda, con dos papeles distintos:
 
 | | [Despliegue (5166)](https://lorenalresusta.github.io/Despliegue-Contenedores/) | [Mantenimiento (5169)](https://lorenalresusta.github.io/Mantenimiento-Contenedores/) |
 |---|---|---|
 | Papel | Equipo que **construye y pone en marcha** la plataforma | Técnico de **operaciones** que la recibe en producción |
-| BiciAlacant | De un `docker run` a un clúster en alta disponibilidad | Se observa, se valida, se protege, se actualiza y se da de baja |
+| MiTienda | De un `docker run` a un clúster en alta disponibilidad | Se observa, se valida, se protege, se actualiza y se da de baja |
 | Resultado | Clúster y aplicación desplegados | Libro de operaciones del servicio |
 
 ```mermaid

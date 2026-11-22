@@ -12,6 +12,12 @@ En la UD01 creaste un contenedor a mano con media docena de órdenes del núcleo
 
 {{< ra "RA2:a,b,c,d,e,f,g" "RA3:a,b,c,d,e,f,g,h" >}}
 
+
+{{< figura src="ud02/imagen-contenedor.svg" alt="De la imagen en capas al contenedor" caption="La imagen son capas de solo lectura; el contenedor añade una capa escribible que se pierde al borrarlo." >}}
+
+> [!TIP]
+> **Desde cero.** una **imagen** es la receta congelada de tu aplicación (código + dependencias); un **contenedor** es el plato ya cocinado a partir de esa receta. Un **registro** como Docker Hub es el recetario compartido del que descargas y al que subes recetas.
+
 ### Objetivos de aprendizaje
 
 - Elegir e instalar un motor (Docker Engine, Podman, containerd) desde fuentes oficiales.
@@ -209,7 +215,7 @@ Un contenedor que no arranca se diagnostica siempre en el mismo orden:
 ### 4.1 Nombre completo de una imagen
 
 ```text
-registro.local:5000/bicialacant/api:1.2.0@sha256:4f3c...
+registro.local:5000/mitienda/api:1.2.0@sha256:4f3c...
 └────── registro ─────┘└─ repositorio ─┘└tag┘└──── digest ────┘
 ```
 
@@ -245,9 +251,9 @@ Con **versionado semántico** (MAYOR.MENOR.PARCHE) se publican varias etiquetas 
 
 ```bash
 docker login registro.local:5000
-docker tag bicialacant-api:1.0.0 registro.local:5000/bicialacant/api:1.0.0
-docker push registro.local:5000/bicialacant/api:1.0.0
-docker pull registro.local:5000/bicialacant/api:1.0.0
+docker tag mitienda-api:1.0.0 registro.local:5000/mitienda/api:1.0.0
+docker push registro.local:5000/mitienda/api:1.0.0
+docker pull registro.local:5000/mitienda/api:1.0.0
 ```
 
 ---
@@ -385,7 +391,7 @@ volumes:
 |---|---|
 | `docker compose up -d [--build]` | Crea y arranca todo (reconstruye si se pide) |
 | `docker compose ps` / `logs -f api` | Estado / registros |
-| `docker compose exec db psql -U bici` | Entra en un servicio |
+| `docker compose exec db psql -U producto` | Entra en un servicio |
 | `docker compose up -d --scale api=3` | Varias réplicas de un servicio (sin puerto fijo publicado) |
 | `docker compose config` | Muestra el fichero final con variables resueltas (valida la sintaxis) |
 | `docker compose down` | Para y borra contenedores y redes |
@@ -407,7 +413,7 @@ La **misma imagen** debe servir para desarrollo, pruebas y producción. Lo que c
 | Ficheros montados (`configs`, `-v ./app.conf:/etc/app.conf:ro`) | Ficheros de configuración | — |
 | **Secretos de Compose** (`secrets:`) | Contraseñas, claves | Se montan en `/run/secrets/<nombre>` como fichero, no como variable |
 
-Muchas imágenes oficiales aceptan la variante `_FILE` de sus variables: `POSTGRES_PASSWORD_FILE=/run/secrets/db_password`. La API de BiciAlacant hace lo mismo con `DB_PASSWORD_FILE`.
+Muchas imágenes oficiales aceptan la variante `_FILE` de sus variables: `POSTGRES_PASSWORD_FILE=/run/secrets/db_password`. La API de MiTienda hace lo mismo con `DB_PASSWORD_FILE`.
 
 ---
 
@@ -469,6 +475,16 @@ Muchas imágenes oficiales aceptan la variante `_FILE` de sus variables: `POSTGR
   answer: 1
   explain: "Los secretos se inyectan al ejecutar (secretos de Compose, Secrets de Kubernetes), nunca en la imagen."
 {{< /quiz >}}
+
+## Vídeos y recursos para aprender desde cero
+
+{{< recurso tipo="Vídeo" titulo="Imágenes y Dockerfile paso a paso" autor="Pelado Nerd · YouTube (español)" url="https://www.youtube.com/results?search_query=pelado+nerd+dockerfile+imagenes" desc="Cómo se construye una imagen y por qué el orden de las capas importa." >}}
+{{< recurso tipo="Vídeo" titulo="Docker Compose desde cero" autor="Fazt / HolaMundo · YouTube (español)" url="https://www.youtube.com/results?search_query=docker+compose+desde+cero+español" desc="Levantar varios servicios con un solo fichero." >}}
+{{< recurso tipo="Interactivo" titulo="Tutorial oficial «Getting started»" autor="Docker Docs" url="https://docs.docker.com/get-started/" desc="Construye y publica tu primera imagen siguiendo pasos guiados." >}}
+{{< recurso tipo="Docs" titulo="Buenas prácticas para escribir un Dockerfile" autor="Docker Docs" url="https://docs.docker.com/build/building/best-practices/" desc="La lista oficial de buenas prácticas que seguimos en la unidad." >}}
+
+> Los enlaces de vídeo abren una búsqueda en YouTube con el autor recomendado: elige el resultado más reciente y claro. Prioriza siempre vídeos de los últimos años, porque las herramientas cambian.
+
 
 ## Referencias
 

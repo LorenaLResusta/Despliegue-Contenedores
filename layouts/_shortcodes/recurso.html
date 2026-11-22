@@ -1,0 +1,24 @@
+{{- /*
+  Tarjeta de recurso externo para aprender (vídeo, curso, práctica interactiva, documentación).
+  Uso: {{< recurso tipo="Vídeo" titulo="Docker desde cero" autor="Pelado Nerd · YouTube"
+        url="https://www.youtube.com/results?search_query=pelado+nerd+docker+desde+cero"
+        desc="Curso completo y ameno, en español, desde la primera imagen hasta Compose." >}}
+  tipo: Vídeo | Curso | Interactivo | Docs | Libro
+*/ -}}
+{{- $tipo := .Get "tipo" | default "Recurso" -}}
+{{- $ic := index (dict
+      "Vídeo" "▶" "Video" "▶"
+      "Curso" "🎓"
+      "Interactivo" "🧪" "Práctica" "🧪"
+      "Docs" "📄" "Documentación" "📄"
+      "Libro" "📘") $tipo | default "🔗" -}}
+{{- $clase := lower (replace (replace $tipo "í" "i") " " "-") -}}
+<a class="sad-rec sad-rec--{{ $clase }}" href="{{ .Get "url" }}" target="_blank" rel="noopener">
+  <span class="sad-rec-ic" aria-hidden="true">{{ $ic }}</span>
+  <span class="sad-rec-main">
+    <span class="sad-rec-t">{{ .Get "titulo" }}</span>
+    {{- with .Get "autor" }}<span class="sad-rec-a">{{ . }}</span>{{ end -}}
+    {{- with .Get "desc" }}<span class="sad-rec-d">{{ . }}</span>{{ end -}}
+  </span>
+  <span class="sad-rec-tag">{{ $tipo }}</span>
+</a>

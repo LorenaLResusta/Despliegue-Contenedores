@@ -3,7 +3,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: db
-  namespace: bicialacant
+  namespace: mitienda
   labels: {app: db}
 spec:
   clusterIP: None            # Service «headless»: DNS estable para el StatefulSet
@@ -16,7 +16,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: db
-  namespace: bicialacant
+  namespace: mitienda
 spec:
   serviceName: db
   replicas: 1
@@ -38,9 +38,9 @@ spec:
             - containerPort: 5432
           env:
             - name: POSTGRES_DB
-              value: bicialacant
+              value: mitienda
             - name: POSTGRES_USER
-              value: bici
+              value: tienda
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef: {name: db-cred, key: password}
@@ -55,7 +55,7 @@ spec:
               mountPath: /var/run/postgresql
           readinessProbe:
             exec:
-              command: ["pg_isready", "-U", "bici", "-d", "bicialacant"]
+              command: ["pg_isready", "-U", "tienda", "-d", "mitienda"]
             periodSeconds: 5
           resources:
             requests: {cpu: 100m, memory: 256Mi}

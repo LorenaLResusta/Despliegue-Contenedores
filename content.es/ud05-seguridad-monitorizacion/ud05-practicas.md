@@ -17,7 +17,7 @@ bookToc: true
 | [5.5 Políticas de red con Calico](#práctica-55--políticas-de-red-con-calico) | Guiada | ●●○ | 1,5 | RA6: d |
 | [5.6 Métricas, paneles y alertas con Prometheus y Grafana](#práctica-56--métricas-paneles-y-alertas-con-prometheus-y-grafana) | Guiada | ●●○ | 2 | RA6: g |
 | [5.7 Registros centralizados con Fluent Bit y Loki](#práctica-57--registros-centralizados-con-fluent-bit-y-loki) | Guiada | ●●● | 2 | RA6: g |
-| [5.8 Práctica final: BiciAlacant en alta disponibilidad](#práctica-58--práctica-final-bicialacant-en-alta-disponibilidad) | Proyecto | ●●● | 5 | RA6: a-i · RA4: g, h |
+| [5.8 Práctica final: MiTienda en alta disponibilidad](#práctica-58--práctica-final-mitienda-en-alta-disponibilidad) | Proyecto | ●●● | 5 | RA6: a-i · RA4: g, h |
 | **Total** | | | **18 h** | |
 
 > [!NOTE]
@@ -83,7 +83,7 @@ Comprobar lo que puede hacer un atacante dentro de un contenedor mal configurado
     docker inspect web-seguro --format '{{.HostConfig.ReadonlyRootfs}} {{.HostConfig.CapDrop}} {{.HostConfig.SecurityOpt}}'
     ```
 
-6. **Lo mismo en Compose.** Añade a cada servicio de BiciAlacant de la práctica 2.8:
+6. **Lo mismo en Compose.** Añade a cada servicio de MiTienda de la práctica 2.8:
 
     ```yaml
         read_only: true
@@ -109,7 +109,7 @@ Comprobar lo que puede hacer un atacante dentro de un contenedor mal configurado
 
 - [ ] Explicas por qué los pasos 1 y 2 equivalen a ser `root` en el anfitrión.
 - [ ] `web-seguro` funciona con sistema de archivos de solo lectura, sin capacidades y sin `root`.
-- [ ] BiciAlacant con Compose arranca con `read_only` y `cap_drop: [ALL]` en todos los servicios (con los ajustes necesarios).
+- [ ] MiTienda con Compose arranca con `read_only` y `cap_drop: [ALL]` en todos los servicios (con los ajustes necesarios).
 
 #### Errores habituales
 
@@ -154,7 +154,7 @@ Escanear imágenes y configuraciones, interpretar los resultados, reducir las vu
     ```bash
     trivy image --severity HIGH,CRITICAL python:3.9
     trivy image --severity HIGH,CRITICAL python:3.13-slim
-    trivy image --severity HIGH,CRITICAL --ignore-unfixed bicialacant-api:1.0.0
+    trivy image --severity HIGH,CRITICAL --ignore-unfixed mitienda-api:1.0.0
     ```
 
     Anota el número de vulnerabilidades por gravedad de cada una.
@@ -162,13 +162,13 @@ Escanear imágenes y configuraciones, interpretar los resultados, reducir las vu
 3. **Solo lo que tiene corrección y en formato tabla resumida:**
 
     ```bash
-    trivy image --ignore-unfixed --format table --severity CRITICAL,HIGH,MEDIUM bicialacant-web:1.0.0
+    trivy image --ignore-unfixed --format table --severity CRITICAL,HIGH,MEDIUM mitienda-web:1.0.0
     ```
 
 4. **Configuraciones incorrectas** (Dockerfile y manifiestos de Kubernetes):
 
     ```bash
-    cd ~/curso/bicialacant
+    cd ~/curso/mitienda
     trivy config api/Dockerfile
     trivy config k8s/
     ```
@@ -188,7 +188,7 @@ Escanear imágenes y configuraciones, interpretar los resultados, reducir las vu
 6. **SBOM en CycloneDX:**
 
     ```bash
-    trivy image --format cyclonedx --output sbom-api.cdx.json bicialacant-api:1.0.0
+    trivy image --format cyclonedx --output sbom-api.cdx.json mitienda-api:1.0.0
     jq '.components | length' sbom-api.cdx.json
     jq -r '.components[] | select(.name=="flask") | "\(.name) \(.version)"' sbom-api.cdx.json
     trivy sbom sbom-api.cdx.json --severity HIGH,CRITICAL     # escanear el SBOM, sin la imagen
@@ -199,7 +199,7 @@ Escanear imágenes y configuraciones, interpretar los resultados, reducir las vu
 8. **Escanear el clúster** (opcional, con el contexto `kubeadm`):
 
     ```bash
-    trivy k8s --report summary --include-namespaces bicialacant
+    trivy k8s --report summary --include-namespaces mitienda
     ```
 
 {{% /steps %}}
@@ -218,7 +218,7 @@ Escanear imágenes y configuraciones, interpretar los resultados, reducir las vu
 
 #### Ampliación
 
-Firma `bicialacant-api:1.0.0` en el registro privado con **cosign** (`cosign generate-key-pair`, `cosign sign --key cosign.key registro.local:5000/bicialacant/api:1.0.0`) y verifica la firma.
+Firma `mitienda-api:1.0.0` en el registro privado con **cosign** (`cosign generate-key-pair`, `cosign sign --key cosign.key registro.local:5000/mitienda/api:1.0.0`) y verifica la firma.
 
 ---
 
@@ -232,7 +232,7 @@ Crear una usuaria con certificado y permisos limitados a un espacio de nombres, 
 
 #### Contexto
 
-Ana, desarrolladora de BiciAlacant, necesita desplegar y ver registros en su espacio de nombres, pero no debe leer Secrets ni tocar otros espacios. Un proceso de monitorización interno necesita listar Pods y nada más.
+Ana, desarrolladora de MiTienda, necesita desplegar y ver registros en su espacio de nombres, pero no debe leer Secrets ni tocar otros espacios. Un proceso de monitorización interno necesita listar Pods y nada más.
 
 #### Desarrollo
 
@@ -273,18 +273,18 @@ Ana, desarrolladora de BiciAlacant, necesita desplegar y ver registros en su esp
     export KUBECONFIG=~/ud05/rbac/ana.kubeconfig
     kubectl config set-cluster curso --server="$SERVER" --certificate-authority=ca.crt --embed-certs
     kubectl config set-credentials ana --client-certificate=ana.crt --client-key=ana.key --embed-certs
-    kubectl config set-context ana@curso --cluster=curso --user=ana --namespace=bicialacant
+    kubectl config set-context ana@curso --cluster=curso --user=ana --namespace=mitienda
     kubectl config use-context ana@curso
     kubectl get pods            # Forbidden: autenticada, pero sin permisos
     unset KUBECONFIG
     ```
 
-4. **Role y RoleBinding** para el grupo `desarrollo` en `bicialacant`:
+4. **Role y RoleBinding** para el grupo `desarrollo` en `mitienda`:
 
     ```yaml
     apiVersion: rbac.authorization.k8s.io/v1
     kind: Role
-    metadata: {name: desarrollador, namespace: bicialacant}
+    metadata: {name: desarrollador, namespace: mitienda}
     rules:
       - apiGroups: [""]
         resources: [pods, pods/log, services, configmaps]
@@ -298,7 +298,7 @@ Ana, desarrolladora de BiciAlacant, necesita desplegar y ver registros en su esp
     ---
     apiVersion: rbac.authorization.k8s.io/v1
     kind: RoleBinding
-    metadata: {name: desarrollo, namespace: bicialacant}
+    metadata: {name: desarrollo, namespace: mitienda}
     subjects:
       - {kind: Group, name: desarrollo, apiGroup: rbac.authorization.k8s.io}
     roleRef: {kind: Role, name: desarrollador, apiGroup: rbac.authorization.k8s.io}
@@ -308,7 +308,7 @@ Ana, desarrolladora de BiciAlacant, necesita desplegar y ver registros en su esp
 
     ```bash
     for v in "get pods" "list deployments" "patch deployments" "get secrets" "delete pods" "create pods/exec"; do
-      printf '%-20s %s\n' "$v" "$(kubectl auth can-i $v -n bicialacant --as ana --as-group desarrollo)"
+      printf '%-20s %s\n' "$v" "$(kubectl auth can-i $v -n mitienda --as ana --as-group desarrollo)"
     done
     kubectl auth can-i get pods -n kube-system --as ana --as-group desarrollo
     KUBECONFIG=~/ud05/rbac/ana.kubeconfig kubectl scale deployment api --replicas=4
@@ -320,11 +320,11 @@ Ana, desarrolladora de BiciAlacant, necesita desplegar y ver registros en su esp
     ```yaml
     apiVersion: v1
     kind: ServiceAccount
-    metadata: {name: monitor, namespace: bicialacant}
+    metadata: {name: monitor, namespace: mitienda}
     ---
     apiVersion: rbac.authorization.k8s.io/v1
     kind: Role
-    metadata: {name: lector-pods, namespace: bicialacant}
+    metadata: {name: lector-pods, namespace: mitienda}
     rules:
       - apiGroups: [""]
         resources: [pods]
@@ -332,30 +332,30 @@ Ana, desarrolladora de BiciAlacant, necesita desplegar y ver registros en su esp
     ---
     apiVersion: rbac.authorization.k8s.io/v1
     kind: RoleBinding
-    metadata: {name: monitor, namespace: bicialacant}
-    subjects: [{kind: ServiceAccount, name: monitor, namespace: bicialacant}]
+    metadata: {name: monitor, namespace: mitienda}
+    subjects: [{kind: ServiceAccount, name: monitor, namespace: mitienda}]
     roleRef: {kind: Role, name: lector-pods, apiGroup: rbac.authorization.k8s.io}
     ```
 
 7. **Un Pod que usa la API con su token:**
 
     ```bash
-    kubectl -n bicialacant run sonda --image=curlimages/curl:8.11.1 --restart=Never \
+    kubectl -n mitienda run sonda --image=curlimages/curl:8.11.1 --restart=Never \
       --overrides='{"spec":{"serviceAccountName":"monitor","securityContext":{"runAsNonRoot":true,"runAsUser":100,"seccompProfile":{"type":"RuntimeDefault"}},"containers":[{"name":"sonda","image":"curlimages/curl:8.11.1","command":["sleep","3600"],"securityContext":{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]}}}]}}'
-    kubectl -n bicialacant exec sonda -- sh -c '
+    kubectl -n mitienda exec sonda -- sh -c '
       T=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
       C=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-      curl -s --cacert $C -H "Authorization: Bearer $T" https://kubernetes.default.svc/api/v1/namespaces/bicialacant/pods | grep -c "\"name\""
-      curl -s --cacert $C -H "Authorization: Bearer $T" https://kubernetes.default.svc/api/v1/namespaces/bicialacant/secrets | grep -o "\"reason\": \"[A-Za-z]*\""'
+      curl -s --cacert $C -H "Authorization: Bearer $T" https://kubernetes.default.svc/api/v1/namespaces/mitienda/pods | grep -c "\"name\""
+      curl -s --cacert $C -H "Authorization: Bearer $T" https://kubernetes.default.svc/api/v1/namespaces/mitienda/secrets | grep -o "\"reason\": \"[A-Za-z]*\""'
     ```
 
-8. **Revisión de la cuenta por defecto.** Comprueba que la ServiceAccount `default` de `bicialacant` no tiene permisos y añade `automountServiceAccountToken: false` a los Deployments de BiciAlacant (no usan la API).
+8. **Revisión de la cuenta por defecto.** Comprueba que la ServiceAccount `default` de `mitienda` no tiene permisos y añade `automountServiceAccountToken: false` a los Deployments de MiTienda (no usan la API).
 
 {{% /steps %}}
 
 #### Comprobación
 
-- [ ] Ana se autentica con su certificado y solo puede lo que dice su Role en `bicialacant`.
+- [ ] Ana se autentica con su certificado y solo puede lo que dice su Role en `mitienda`.
 - [ ] `get secrets` y cualquier acción en `kube-system` devuelven `no`.
 - [ ] La sonda lista Pods y recibe `Forbidden` al pedir Secrets.
 
@@ -426,7 +426,7 @@ Aplicar los estándares de seguridad de Pods por espacio de nombres y limitar el
 4. **Antes de exigirlo en un espacio con cargas, simula:**
 
     ```bash
-    kubectl label --dry-run=server --overwrite namespace bicialacant pod-security.kubernetes.io/enforce=restricted
+    kubectl label --dry-run=server --overwrite namespace mitienda pod-security.kubernetes.io/enforce=restricted
     kubectl label --dry-run=server --overwrite namespace kube-system pod-security.kubernetes.io/enforce=restricted
     ```
 
@@ -490,19 +490,19 @@ Instala **Kyverno** y crea una política que rechace imágenes que no procedan d
 
 #### Objetivo
 
-Aplicar un modelo de **denegación por defecto** a BiciAlacant y permitir solo los flujos necesarios, comprobándolo con una matriz de conectividad.
+Aplicar un modelo de **denegación por defecto** a MiTienda y permitir solo los flujos necesarios, comprobándolo con una matriz de conectividad.
 
-{{< descarga "recursos/bicialacant/k8s/70-networkpolicies.yaml" >}}
+{{< descarga "recursos/mitienda/k8s/70-networkpolicies.yaml" >}}
 
 #### Desarrollo
 
 {{% steps %}}
 
-1. **Pod de pruebas** en el espacio de BiciAlacant y otro en un espacio ajeno:
+1. **Pod de pruebas** en el espacio de MiTienda y otro en un espacio ajeno:
 
     ```bash
     kubectl create namespace intruso
-    for ns in bicialacant intruso; do
+    for ns in mitienda intruso; do
       kubectl -n $ns run prueba --image=busybox:1.37 --labels=app=prueba --restart=Never \
         --overrides='{"spec":{"securityContext":{"runAsNonRoot":true,"runAsUser":1000,"seccompProfile":{"type":"RuntimeDefault"}},"containers":[{"name":"prueba","image":"busybox:1.37","command":["sleep","1d"],"securityContext":{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]}}}]}}'
     done
@@ -517,15 +517,15 @@ Aplicar un modelo de **denegación por defecto** a BiciAlacant y permitir solo l
       if kubectl -n "$1" exec "$2" -- nc -z -w 2 "$3" "$4" 2>/dev/null; then r=SI; else r=no; fi
       printf '%-30s -> %-35s %s\n' "$1/$2" "$3:$4" "$r"
     }
-    WEB=$(kubectl -n bicialacant get pod -l app=web -o name | head -1 | cut -d/ -f2)
-    API=$(kubectl -n bicialacant get pod -l app=api -o name | head -1 | cut -d/ -f2)
-    prueba bicialacant "$WEB" api 8000
-    prueba bicialacant "$WEB" db 5432
-    prueba bicialacant "$API" db 5432
-    prueba bicialacant "$API" cache 6379
-    prueba bicialacant prueba db 5432
-    prueba intruso prueba api.bicialacant 8000
-    prueba intruso prueba db.bicialacant 5432
+    WEB=$(kubectl -n mitienda get pod -l app=web -o name | head -1 | cut -d/ -f2)
+    API=$(kubectl -n mitienda get pod -l app=api -o name | head -1 | cut -d/ -f2)
+    prueba mitienda "$WEB" api 8000
+    prueba mitienda "$WEB" db 5432
+    prueba mitienda "$API" db 5432
+    prueba mitienda "$API" cache 6379
+    prueba mitienda prueba db 5432
+    prueba intruso prueba api.mitienda 8000
+    prueba intruso prueba db.mitienda 5432
     ```
 
     > [!NOTE]
@@ -534,18 +534,18 @@ Aplicar un modelo de **denegación por defecto** a BiciAlacant y permitir solo l
 3. **Aplica las políticas** y vuelve a pasar la matriz:
 
     ```bash
-    kubectl apply -f ~/curso/bicialacant/k8s/70-networkpolicies.yaml
-    kubectl -n bicialacant get networkpolicy
+    kubectl apply -f ~/curso/mitienda/k8s/70-networkpolicies.yaml
+    kubectl -n mitienda get networkpolicy
     ./matriz.sh
     ```
 
-4. **¿Sigue funcionando la aplicación?** `curl -k https://bicialacant.local/api/salud`. Si no, revisa la política de entrada de `web` (el espacio de Traefik debe coincidir con `kubernetes.io/metadata.name: traefik`).
+4. **¿Sigue funcionando la aplicación?** `curl -k https://mitienda.local/api/salud`. Si no, revisa la política de entrada de `web` (el espacio de Traefik debe coincidir con `kubernetes.io/metadata.name: traefik`).
 
 5. **Comprueba el DNS** desde `prueba` (debe resolver) y la salida a Internet (debe fallar):
 
     ```bash
-    kubectl -n bicialacant exec prueba -- nslookup api
-    kubectl -n bicialacant exec prueba -- wget -qO- -T 3 http://example.com || echo "Sin salida a Internet"
+    kubectl -n mitienda exec prueba -- nslookup api
+    kubectl -n mitienda exec prueba -- wget -qO- -T 3 http://example.com || echo "Sin salida a Internet"
     ```
 
 6. **Política propia.** Escribe una política que permita a los Pods con etiqueta `app=prueba` del espacio `intruso` acceder **solo** al puerto 8000 de la API (simula un servicio de otro equipo autorizado). Compruébalo con la matriz.
@@ -561,7 +561,7 @@ Matriz esperada tras las políticas:
 | web → api:8000 | SI | SI |
 | web → db:5432 | SI | no |
 | api → db:5432 / cache:6379 | SI | SI |
-| prueba (bicialacant) → db | SI | no |
+| prueba (mitienda) → db | SI | no |
 | intruso → api / db | SI | no (api: SI con tu política del paso 6) |
 
 #### Errores habituales
@@ -581,7 +581,7 @@ Con la API de Calico (`projectcalico.org/v3`), crea una `GlobalNetworkPolicy` qu
 
 #### Objetivo
 
-Instalar la pila de monitorización, consultar métricas con PromQL, crear un panel para BiciAlacant y una alerta que salte cuando la API deje de estar disponible.
+Instalar la pila de monitorización, consultar métricas con PromQL, crear un panel para MiTienda y una alerta que salte cuando la API deje de estar disponible.
 
 #### Desarrollo
 
@@ -612,17 +612,17 @@ Instalar la pila de monitorización, consultar métricas con PromQL, crear un pa
 
 2. **Publica Grafana** con una HTTPRoute en el Gateway de la UD04 (`grafana.local`, Service `kps-grafana`, puerto 80) y añade `grafana.local` a tu `/etc/hosts`. Entra con `admin` y la contraseña de los valores.
 
-3. **Explora los paneles incluidos**: *Kubernetes / Compute Resources / Namespace (Pods)* para `bicialacant`, *Node Exporter / Nodes*. ¿Qué nodo tiene más memoria ocupada?
+3. **Explora los paneles incluidos**: *Kubernetes / Compute Resources / Namespace (Pods)* para `mitienda`, *Node Exporter / Nodes*. ¿Qué nodo tiene más memoria ocupada?
 
 4. **PromQL.** Desde *Explore* (origen Prometheus), ejecuta las consultas de la teoría y estas:
 
     ```text
-    sum by (pod) (rate(container_cpu_usage_seconds_total{namespace="bicialacant", container!=""}[5m]))
-    kube_deployment_status_replicas_available{namespace="bicialacant"}
+    sum by (pod) (rate(container_cpu_usage_seconds_total{namespace="mitienda", container!=""}[5m]))
+    kube_deployment_status_replicas_available{namespace="mitienda"}
     sum by (namespace) (kube_pod_container_status_restarts_total)
     ```
 
-5. **Panel de BiciAlacant.** Crea un panel nuevo con cuatro visualizaciones: réplicas disponibles por Deployment, CPU por Pod, memoria por Pod y reinicios en la última hora. Expórtalo en JSON.
+5. **Panel de MiTienda.** Crea un panel nuevo con cuatro visualizaciones: réplicas disponibles por Deployment, CPU por Pod, memoria por Pod y reinicios en la última hora. Expórtalo en JSON.
 
 6. **Regla de alerta** (`alerta-api.yaml`):
 
@@ -630,20 +630,20 @@ Instalar la pila de monitorización, consultar métricas con PromQL, crear un pa
     apiVersion: monitoring.coreos.com/v1
     kind: PrometheusRule
     metadata:
-      name: bicialacant
+      name: mitienda
       namespace: monitorizacion
     spec:
       groups:
-        - name: bicialacant
+        - name: mitienda
           rules:
             - alert: APISinReplicas
-              expr: kube_deployment_status_replicas_available{namespace="bicialacant", deployment="api"} < 1
+              expr: kube_deployment_status_replicas_available{namespace="mitienda", deployment="api"} < 1
               for: 1m
               labels: {severity: critical}
               annotations:
-                summary: "BiciAlacant: la API no tiene réplicas disponibles"
+                summary: "MiTienda: la API no tiene réplicas disponibles"
             - alert: PodsReiniciando
-              expr: increase(kube_pod_container_status_restarts_total{namespace="bicialacant"}[15m]) > 3
+              expr: increase(kube_pod_container_status_restarts_total{namespace="mitienda"}[15m]) > 3
               labels: {severity: warning}
               annotations:
                 summary: "{{ $labels.pod }} se ha reiniciado más de 3 veces en 15 min"
@@ -653,14 +653,14 @@ Instalar la pila de monitorización, consultar métricas con PromQL, crear un pa
     kubectl apply -f alerta-api.yaml
     ```
 
-7. **Provoca la alerta:** `kubectl -n bicialacant scale deployment api --replicas=0`. Observa en Prometheus (*Alerts*: `Pending` → `Firing`) y en Alertmanager (`kubectl -n monitorizacion port-forward svc/kps-alertmanager 9093`). Restaura las réplicas y comprueba que se resuelve.
+7. **Provoca la alerta:** `kubectl -n mitienda scale deployment api --replicas=0`. Observa en Prometheus (*Alerts*: `Pending` → `Firing`) y en Alertmanager (`kubectl -n monitorizacion port-forward svc/kps-alertmanager 9093`). Restaura las réplicas y comprueba que se resuelve.
 
 {{% /steps %}}
 
 #### Comprobación
 
 - [ ] Todos los Pods de `monitorizacion` en `Running` y Grafana accesible por `grafana.local`.
-- [ ] Panel de BiciAlacant con las cuatro visualizaciones.
+- [ ] Panel de MiTienda con las cuatro visualizaciones.
 - [ ] La alerta `APISinReplicas` pasa a `Firing` con la API a 0 y se resuelve al restaurarla.
 
 #### Errores habituales
@@ -740,15 +740,15 @@ Recoger los registros de todos los contenedores del clúster con un DaemonSet, a
 4. **Consultas LogQL** en *Explore*:
 
     ```text
-    {namespace="bicialacant"}
-    {namespace="bicialacant", container="api"} |= "POST /api/alquiler"
-    {namespace="bicialacant", container="api"} |= " 409 "
-    sum by (container) (count_over_time({namespace="bicialacant"}[5m]))
+    {namespace="mitienda"}
+    {namespace="mitienda", container="api"} |= "POST /api/comprar"
+    {namespace="mitienda", container="api"} |= " 409 "
+    sum by (container) (count_over_time({namespace="mitienda"}[5m]))
     ```
 
     (Los nombres exactos de las etiquetas dependen de `Auto_Kubernetes_Labels`; usa el navegador de etiquetas de Grafana.)
 
-5. **Registros que sobreviven al Pod.** Alquila una bici en una estación sin bicis (respuesta 409), borra el Pod de la API que respondió y busca la línea en Loki: sigue ahí aunque `kubectl logs` ya no pueda mostrarla.
+5. **Registros que sobreviven al Pod.** Intenta comprar un producto agotado, sin stock (respuesta 409), borra el Pod de la API que respondió y busca la línea en Loki: sigue ahí aunque `kubectl logs` ya no pueda mostrarla.
 
 6. **Comparación con EFK.** Redacta en tu cuaderno qué cambiaría si en lugar de Loki se usara Elasticsearch + Kibana (recursos, tipo de búsquedas, componentes) y en qué caso lo elegirías.
 
@@ -771,17 +771,17 @@ Crea en Grafana una **alerta basada en registros**: más de 5 respuestas 409 en 
 
 ---
 
-## Práctica 5.8 · Práctica final: BiciAlacant en alta disponibilidad
+## Práctica 5.8 · Práctica final: MiTienda en alta disponibilidad
 
-{{< practica num="5.8" tipo="Proyecto" duracion="5 h (+ trabajo fuera del aula)" nivel="3" ra="RA6: a-i · RA4: g, h" entorno="Clúster kubeadm completo (UD03-UD05)" entrega="Repositorio bicialacant/ completo + informe final + simulacro en directo (defensa) · Hito H5 · 40 % de la nota" >}}
+{{< practica num="5.8" tipo="Proyecto" duracion="5 h (+ trabajo fuera del aula)" nivel="3" ra="RA6: a-i · RA4: g, h" entorno="Clúster kubeadm completo (UD03-UD05)" entrega="Repositorio mitienda/ completo + informe final + simulacro en directo (defensa) · Hito H5 · 40 % de la nota" >}}
 
 #### Objetivo
 
-Entregar BiciAlacant **lista para producción**: segura, observable, en alta disponibilidad y con los procedimientos de operación documentados, y demostrarlo en un **simulacro de fallos en directo**.
+Entregar MiTienda **lista para producción**: segura, observable, en alta disponibilidad y con los procedimientos de operación documentados, y demostrarlo en un **simulacro de fallos en directo**.
 
 #### Contexto
 
-El ayuntamiento va a poner BiciAlacant en marcha para la temporada de verano. Antes de firmar, su responsable técnico quiere ver la plataforma funcionando y **romperla delante de ti**.
+El ayuntamiento va a poner MiTienda en marcha para la temporada de verano. Antes de firmar, su responsable técnico quiere ver la plataforma funcionando y **romperla delante de ti**.
 
 #### Requisitos que debe cumplir
 
@@ -789,13 +789,13 @@ El ayuntamiento va a poner BiciAlacant en marcha para la temporada de verano. An
 |---|---|---|---|
 | 1 | Imágenes propias en el registro privado, versionadas (semver), sin `latest`, sin vulnerabilidades CRITICAL corregibles; SBOM generado | RA6: a, c | Informe de Trivy y SBOM |
 | 2 | Todos los contenedores sin `root`, `drop: ALL`, sin escalada, seccomp; espacio de nombres con PSS `restricted` en `enforce` | RA6: b, f | `kubectl label` + manifiestos |
-| 3 | *Requests*/*limits* en todo, LimitRange y ResourceQuota en `bicialacant` | RA6: f | `describe quota` |
+| 3 | *Requests*/*limits* en todo, LimitRange y ResourceQuota en `mitienda` | RA6: f | `describe quota` |
 | 4 | API con ≥ 3 réplicas repartidas en nodos (`topologySpreadConstraints`), PDB, HPA, sondas, `RollingUpdate` sin indisponibilidad | RA4: g, h · RA6: h | Manifiestos + prueba de carga |
-| 5 | `web` y Traefik con ≥ 2 réplicas; acceso por `https://bicialacant.local` con Gateway API y MetalLB | RA6: h | `curl` + navegador |
+| 5 | `web` y Traefik con ≥ 2 réplicas; acceso por `https://mitienda.local` con Gateway API y MetalLB | RA6: h | `curl` + navegador |
 | 6 | Base de datos con volumen persistente (NFS, `Retain`) y **copia lógica diaria** con un CronJob (`pg_dump` a otro PVC) | RA6: h, i | CronJob + restauración probada |
 | 7 | NetworkPolicies con denegación por defecto y solo los flujos necesarios | RA6: d | Matriz de conectividad |
 | 8 | RBAC: usuaria `ana` (desarrollo) y ServiceAccounts sin token montado donde no hace falta | RA6: e | `kubectl auth can-i` |
-| 9 | Panel de Grafana de BiciAlacant, alertas `APISinReplicas` y `PodsReiniciando`, registros en Loki | RA6: g | Capturas + JSON del panel |
+| 9 | Panel de Grafana de MiTienda, alertas `APISinReplicas` y `PodsReiniciando`, registros en Loki | RA6: g | Capturas + JSON del panel |
 | 10 | Copia de etcd y procedimiento escrito de restauración | RA6: i | Fichero de *snapshot* + documento |
 | 11 | Todo declarativo en Git (Kustomize o Helm); un único `README` permite desplegar desde cero | RA4: i · RA6: i | Repositorio |
 
@@ -804,7 +804,7 @@ El ayuntamiento va a poner BiciAlacant en marcha para la temporada de verano. An
 
 #### Simulacro de fallos (defensa)
 
-Durante la defensa tendrás un cliente haciendo peticiones continuas a `https://bicialacant.local/api/info` y `/api/estaciones` y contando errores. La profesora elegirá varios de estos fallos:
+Durante la defensa tendrás un cliente haciendo peticiones continuas a `https://mitienda.local/api/info` y `/api/productos` y contando errores. La profesora elegirá varios de estos fallos:
 
 1. Borrar todos los Pods de la API a la vez.
 2. Desplegar una versión de la API que no arranca y pedirte que vuelvas atrás.
@@ -817,7 +817,7 @@ Durante la defensa tendrás un cliente haciendo peticiones continuas a `https://
 
 Para cada fallo debes: **predecir** qué pasará, **observarlo** (Grafana, `kubectl get -w`, Loki), **explicar** el mecanismo que actúa (o por qué no actúa) y, si hace falta, **recuperar** el servicio.
 
-#### Informe final (`bicialacant/docs/informe-final.md`)
+#### Informe final (`mitienda/docs/informe-final.md`)
 
 1. **Arquitectura**: diagrama completo (nodos, espacios de nombres, servicios, red, almacenamiento) y recorrido de una petición.
 2. **Decisiones de diseño** justificadas (por qué cada objeto, cada política, cada valor de recursos).

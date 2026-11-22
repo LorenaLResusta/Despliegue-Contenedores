@@ -15,7 +15,7 @@ Cada unidad tiene una página de **prácticas**. Son la parte principal del curs
 | **Guiada** | Se presenta el procedimiento paso a paso. Su objetivo es aprender la técnica. | En clase. Se comprueba al final de la sesión con la lista de comprobación. |
 | **Autónoma** | Un problema parecido sin el procedimiento. Su objetivo es aplicar la técnica. | Individual. Se entrega y se evalúa. |
 | **Reto** | Un problema abierto o con una dificultad extra. Exige analizar y decidir. | Opcional o para subir nota. Se defiende oralmente. |
-| **Proyecto** | La tarea de BiciAlacant de la unidad. | Individual o por parejas. Forma parte de la práctica final. |
+| **Proyecto** | La tarea de MiTienda de la unidad. | Individual o por parejas. Forma parte de la práctica final. |
 
 La dificultad se indica con tres puntos: ●○○ básico, ●●○ intermedio y ●●● avanzado.
 
@@ -52,7 +52,7 @@ contenedores-<tu-usuario>/
 ├── ud03/
 │   └── p3.10/*.yaml
 ├── ...
-└── bicialacant/                 # proyecto transversal (código + manifiestos + docs)
+└── mitienda/                 # proyecto transversal (código + manifiestos + docs)
     ├── compose.yaml
     ├── k8s/
     └── docs/operacion.md
@@ -66,7 +66,7 @@ contenedores-<tu-usuario>/
 - Cada fichero empieza con un comentario con la práctica, tu nombre y la fecha.
 
 ```yaml
-# Práctica 3.10 · BiciAlacant en Kubernetes · Nombre Apellidos · 2027-02-10
+# Práctica 3.10 · MiTienda en Kubernetes · Nombre Apellidos · 2027-02-10
 apiVersion: apps/v1
 kind: Deployment
 ...
@@ -88,6 +88,6 @@ kind: Deployment
 |---|--:|---|
 | Pruebas teórico-prácticas por unidad (5) | 30 % | RA1-RA6 |
 | Prácticas autónomas, retos y tareas del proyecto | 30 % | RA2-RA6 |
-| **Práctica final** (BiciAlacant en alta disponibilidad, [práctica 5.8](/ud05-seguridad-monitorizacion/ud05-practicas/)) | 40 % | RA4-RA6 |
+| **Práctica final** (MiTienda en alta disponibilidad, [práctica 5.8](/ud05-seguridad-monitorizacion/ud05-practicas/)) | 40 % | RA4-RA6 |
 
 Para aprobar se necesita al menos un 5 en cada RA. Las prácticas guiadas no se califican, pero las órdenes y conceptos que trabajan **entran en las pruebas**.

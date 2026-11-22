@@ -19,7 +19,7 @@ bookToc: true
 | [3.7 Clúster de tres nodos con kubeadm](#práctica-37--clúster-de-tres-nodos-con-kubeadm) ⚠️ | Guiada | ●●● | 5 | RA4: c, d · RA2: a |
 | [3.8 Escalado automático con HPA](#práctica-38--escalado-automático-con-hpa) | Guiada | ●●○ | 2 | RA4: h |
 | [3.9 Empaquetar con Helm y Kustomize](#práctica-39--empaquetar-con-helm-y-kustomize) | Guiada | ●●○ | 2 | RA4: i |
-| [3.10 BiciAlacant en Kubernetes](#práctica-310--bicialacant-en-kubernetes) | Proyecto | ●●● | 3 | RA4: e-i |
+| [3.10 MiTienda en Kubernetes](#práctica-310--mitienda-en-kubernetes) | Proyecto | ●●● | 3 | RA4: e-i |
 | **Total** | | | **24 h** | |
 
 > [!TIP]
@@ -1164,33 +1164,33 @@ Instalar software de terceros con Helm gestionando sus versiones, y adaptar tus 
 
 #### Ampliación
 
-Convierte los manifiestos de BiciAlacant en un chart propio con `values.yaml` para la imagen, las réplicas y los recursos de cada servicio.
+Convierte los manifiestos de MiTienda en un chart propio con `values.yaml` para la imagen, las réplicas y los recursos de cada servicio.
 
 ---
 
-## Práctica 3.10 · BiciAlacant en Kubernetes
+## Práctica 3.10 · MiTienda en Kubernetes
 
-{{< practica num="3.10" tipo="Proyecto" duracion="3 h" nivel="3" ra="RA4: e, f, g, h, i" entorno="kind (o el clúster kubeadm) · imágenes de la práctica 2.8" entrega="bicialacant/k8s/ + docs/03-kubernetes.md con evidencias · Hito H3" >}}
+{{< practica num="3.10" tipo="Proyecto" duracion="3 h" nivel="3" ra="RA4: e, f, g, h, i" entorno="kind (o el clúster kubeadm) · imágenes de la práctica 2.8" entrega="mitienda/k8s/ + docs/03-kubernetes.md con evidencias · Hito H3" >}}
 
 #### Objetivo
 
-Desplegar BiciAlacant completa de forma declarativa, con la base de datos como StatefulSet, la API con sondas y actualización progresiva, y comprobar su comportamiento ante fallos y versiones nuevas.
+Desplegar MiTienda completa de forma declarativa, con la base de datos como StatefulSet, la API con sondas y actualización progresiva, y comprobar su comportamiento ante fallos y versiones nuevas.
 
 #### Requisitos
 
-Imágenes `bicialacant-api:1.0.0` y `bicialacant-web:1.0.0` construidas en la práctica 2.8. Descarga los manifiestos y estúdialos antes de aplicarlos:
+Imágenes `mitienda-api:1.0.0` y `mitienda-web:1.0.0` construidas en la práctica 2.8. Descarga los manifiestos y estúdialos antes de aplicarlos:
 
-{{< descarga "recursos/bicialacant/k8s/00-namespace.yaml" >}}
-{{< descarga "recursos/bicialacant/k8s/01-config.yaml" >}}
-{{< descarga "recursos/bicialacant/k8s/10-postgres.yaml" >}}
-{{< descarga "recursos/bicialacant/k8s/20-cache.yaml" >}}
-{{< descarga "recursos/bicialacant/k8s/30-api.yaml" >}}
-{{< descarga "recursos/bicialacant/k8s/40-web.yaml" >}}
+{{< descarga "recursos/mitienda/k8s/00-namespace.yaml" >}}
+{{< descarga "recursos/mitienda/k8s/01-config.yaml" >}}
+{{< descarga "recursos/mitienda/k8s/10-postgres.yaml" >}}
+{{< descarga "recursos/mitienda/k8s/20-cache.yaml" >}}
+{{< descarga "recursos/mitienda/k8s/30-api.yaml" >}}
+{{< descarga "recursos/mitienda/k8s/40-web.yaml" >}}
 
 ```bash
-cd ~/curso/bicialacant && mkdir -p k8s && cd k8s
+cd ~/curso/mitienda && mkdir -p k8s && cd k8s
 for f in 00-namespace 01-config 10-postgres 20-cache 30-api 40-web 50-gateway 60-hpa 70-networkpolicies; do
-  wget -q "https://lorenalresusta.github.io/Contenedores/recursos/bicialacant/k8s/$f.yaml"
+  wget -q "https://lorenalresusta.github.io/Contenedores/recursos/mitienda/k8s/$f.yaml"
 done
 ```
 
@@ -1201,30 +1201,30 @@ done
 1. **Carga las imágenes en kind** (en kubeadm, usa las del registro privado: ver ampliación):
 
     ```bash
-    kind load docker-image bicialacant-api:1.0.0 bicialacant-web:1.0.0 --name curso
+    kind load docker-image mitienda-api:1.0.0 mitienda-web:1.0.0 --name curso
     ```
 
 2. **Espacio de nombres, secreto y script de inicio** (los que no van a Git):
 
     ```bash
     kubectl apply -f 00-namespace.yaml
-    kubectl -n bicialacant create secret generic db-cred --from-literal=password="$(cat ../secrets/db_password.txt)"
-    kubectl -n bicialacant create configmap db-init --from-file=init.sql=../db/init.sql
+    kubectl -n mitienda create secret generic db-cred --from-literal=password="$(cat ../secrets/db_password.txt)"
+    kubectl -n mitienda create configmap db-init --from-file=init.sql=../db/init.sql
     ```
 
 3. **Despliega en orden:**
 
     ```bash
     kubectl apply -f 01-config.yaml -f 10-postgres.yaml -f 20-cache.yaml
-    kubectl -n bicialacant rollout status statefulset/db
+    kubectl -n mitienda rollout status statefulset/db
     kubectl apply -f 30-api.yaml -f 40-web.yaml
-    kubectl -n bicialacant get all
+    kubectl -n mitienda get all
     ```
 
 4. **Prueba la aplicación:**
 
     ```bash
-    kubectl -n bicialacant port-forward svc/web 8080:80 &
+    kubectl -n mitienda port-forward svc/web 8080:80 &
     curl -s localhost:8080/api/salud | jq
     for i in $(seq 6); do curl -s localhost:8080/api/info | jq -r .contenedor; done
     ```
@@ -1232,14 +1232,14 @@ done
 5. **Autocuración y dependencia.** Borra un Pod de la API y el Pod de la base de datos:
 
     ```bash
-    kubectl -n bicialacant delete pod -l app=api --wait=false | head -1
-    kubectl -n bicialacant delete pod db-0
-    kubectl -n bicialacant get pods -w
+    kubectl -n mitienda delete pod -l app=api --wait=false | head -1
+    kubectl -n mitienda delete pod db-0
+    kubectl -n mitienda get pods -w
     ```
 
     Mientras `db-0` vuelve, los Pods de la API pasan a **no listos** (readiness con `/api/salud`) pero **no se reinician** (liveness con `/api/info`). Compruébalo en la columna `READY` y `RESTARTS`.
 
-6. **Persistencia en el StatefulSet.** Alquila dos bicis, borra `db-0`, espera y verifica que el número de bicis libres se conserva.
+6. **Persistencia en el StatefulSet.** Compra dos unidades, borra `db-0`, espera y verifica que el stock se conserva.
 
 7. **Versión nueva de la API.** Construye la 1.1.0 (cambia `APP_VERSION` en el Dockerfile y la variable en `01-config.yaml`), cárgala en kind y actualiza sin corte con un cliente consultando `/api/info` en bucle, como en la práctica 3.4. Después provoca una actualización a una etiqueta inexistente y vuelve atrás.
 
@@ -1251,7 +1251,7 @@ done
 
 #### Comprobación
 
-- [ ] Todos los Pods `Running` y `READY` en el espacio `bicialacant`.
+- [ ] Todos los Pods `Running` y `READY` en el espacio `mitienda`.
 - [ ] `/api/info` responde desde al menos dos Pods.
 - [ ] Al borrar `db-0`, la API deja de estar lista sin reiniciarse y se recupera sola; los datos se conservan.
 - [ ] Actualización a 1.1.0 sin fallos y *rollback* de la versión rota.

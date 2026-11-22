@@ -328,3 +328,19 @@
 .sad-relacion--mantenimiento { border-left-color: #1f8a70; background: color-mix(in srgb, #1f8a70 7%, transparent); }
 .sad-relacion-tit { font-weight: 600; }
 .sad-relacion a::after { content: " ↗"; font-size: .85em; }
+
+/* ---- Tarjetas de recursos externos (vídeos, cursos, labs) ---- */
+.sad-rec{display:flex;align-items:flex-start;gap:.8rem;margin:.5rem 0;padding:.7rem .9rem;
+  border:1px solid var(--gray-300,#d7dde3);border-left:4px solid #0b6e8a;border-radius:.5rem;
+  text-decoration:none;color:inherit;background:rgba(11,110,138,.04);transition:background .15s,border-color .15s}
+.sad-rec:hover{background:rgba(11,110,138,.10);border-left-color:#09576e}
+.sad-rec-ic{font-size:1.3rem;line-height:1.6rem;flex:0 0 1.6rem;text-align:center;color:#0b6e8a}
+.sad-rec-main{display:flex;flex-direction:column;gap:.1rem;min-width:0;flex:1}
+.sad-rec-t{font-weight:600}
+.sad-rec-a{font-size:.8rem;opacity:.75}
+.sad-rec-d{font-size:.85rem;opacity:.9;margin-top:.15rem}
+.sad-rec-tag{flex:0 0 auto;align-self:center;font-size:.7rem;font-weight:600;text-transform:uppercase;
+  letter-spacing:.03em;color:#0b6e8a;border:1px solid #0b6e8a;border-radius:1rem;padding:.05rem .5rem}
+.sad-rec--video{border-left-color:#c0392b}.sad-rec--video .sad-rec-ic,.sad-rec--video .sad-rec-tag{color:#c0392b}.sad-rec--video .sad-rec-tag{border-color:#c0392b}
+.sad-rec--interactivo{border-left-color:#8e44ad}.sad-rec--interactivo .sad-rec-ic,.sad-rec--interactivo .sad-rec-tag{color:#8e44ad}.sad-rec--interactivo .sad-rec-tag{border-color:#8e44ad}
+.sad-rec--curso{border-left-color:#1f7a3d}.sad-rec--curso .sad-rec-ic,.sad-rec--curso .sad-rec-tag{color:#1f7a3d}.sad-rec--curso .sad-rec-tag{border-color:#1f7a3d}

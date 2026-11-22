@@ -47,7 +47,7 @@ ip -br address
 Añade los nombres al fichero `/etc/hosts` de **todas** las máquinas y también al de tu equipo anfitrión:
 
 ```text
-192.168.56.10  ct-lab registro.local bicialacant.local grafana.local
+192.168.56.10  ct-lab registro.local mitienda.local grafana.local
 192.168.56.11  k8s-cp
 192.168.56.12  k8s-w1
 192.168.56.13  k8s-w2
@@ -80,19 +80,19 @@ Cierra la sesión, vuelve a entrar y comprueba `sudo whoami`. Después haz la **
 
 ## 5. Recursos del proyecto
 
-El código de la aplicación **BiciAlacant** está en esta misma web. Para tenerlo en `ct-lab`:
+El código de la aplicación **MiTienda** está en esta misma web. Para tenerlo en `ct-lab`:
 
 ```bash
 mkdir -p ~/curso && cd ~/curso
 for f in api/app.py api/requirements.txt api/Dockerfile web/index.html web/nginx.conf \
          web/Dockerfile db/init.sql compose.yaml; do
-  mkdir -p "bicialacant/$(dirname "$f")"
-  wget -q -O "bicialacant/$f" "https://lorenalresusta.github.io/Contenedores/recursos/bicialacant/$f"
+  mkdir -p "mitienda/$(dirname "$f")"
+  wget -q -O "mitienda/$f" "https://lorenalresusta.github.io/Contenedores/recursos/mitienda/$f"
 done
-tree bicialacant
+tree mitienda
 ```
 
-Los manifiestos de Kubernetes del proyecto están en `recursos/bicialacant/k8s/` y se descargan en la [UD03](/ud03-kubernetes/ud03-practicas/).
+Los manifiestos de Kubernetes del proyecto están en `recursos/mitienda/k8s/` y se descargan en la [UD03](/ud03-kubernetes/ud03-practicas/).
 
 ## 6. Normas del laboratorio
 

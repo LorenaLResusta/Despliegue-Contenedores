@@ -1,10 +1,10 @@
-"""API de BiciAlacant: alquiler de bicicletas de la ciudad.
+"""API de MiTienda: una tienda online sencilla.
 
 Endpoints:
   GET  /api/salud        -> estado de la API y de sus dependencias (para healthchecks y sondas)
   GET  /api/info         -> versión y nombre del contenedor que responde (para ver el balanceo)
-  GET  /api/estaciones   -> estaciones y bicicletas libres (PostgreSQL)
-  POST /api/alquiler/<id> -> alquila una bici de la estación <id>
+  GET  /api/productos    -> catálogo con el stock disponible (PostgreSQL)
+  POST /api/comprar/<id> -> compra una unidad del producto <id> (resta stock)
   GET  /api/visitas      -> contador de visitas (Redis)
 
 Configuración por variables de entorno (nunca dentro de la imagen):
@@ -34,8 +34,8 @@ def conexion_db():
     return psycopg.connect(
         host=os.environ.get("DB_HOST", "db"),
         port=int(os.environ.get("DB_PORT", "5432")),
-        dbname=os.environ.get("DB_NAME", "bicialacant"),
-        user=os.environ.get("DB_USER", "bici"),
+        dbname=os.environ.get("DB_NAME", "mitienda"),
+        user=os.environ.get("DB_USER", "tienda"),
         password=secreto("DB_PASSWORD"),
         connect_timeout=3,
     )
@@ -74,31 +74,37 @@ def info():
     )
 
 
-@app.get("/api/estaciones")
-def estaciones():
+@app.get("/api/productos")
+def productos():
     with conexion_db() as c:
         filas = c.execute(
-            "SELECT id, nombre, barrio, bicis_libres FROM estacion ORDER BY id"
+            "SELECT id, nombre, categoria, precio, stock FROM producto ORDER BY id"
         ).fetchall()
     return jsonify(
         [
-            {"id": f[0], "nombre": f[1], "barrio": f[2], "bicis_libres": f[3]}
+            {
+                "id": f[0],
+                "nombre": f[1],
+                "categoria": f[2],
+                "precio": float(f[3]),
+                "stock": f[4],
+            }
             for f in filas
         ]
     )
 
 
-@app.post("/api/alquiler/<int:id_estacion>")
-def alquilar(id_estacion):
+@app.post("/api/comprar/<int:id_producto>")
+def comprar(id_producto):
     with conexion_db() as c:
         fila = c.execute(
-            "UPDATE estacion SET bicis_libres = bicis_libres - 1 "
-            "WHERE id = %s AND bicis_libres > 0 RETURNING bicis_libres",
-            (id_estacion,),
+            "UPDATE producto SET stock = stock - 1 "
+            "WHERE id = %s AND stock > 0 RETURNING stock",
+            (id_producto,),
         ).fetchone()
     if fila is None:
-        return jsonify(error="Estación inexistente o sin bicis libres"), 409
-    return jsonify(estacion=id_estacion, bicis_libres=fila[0])
+        return jsonify(error="Producto inexistente o sin stock"), 409
+    return jsonify(producto=id_producto, stock=fila[0])
 
 
 @app.get("/api/visitas")

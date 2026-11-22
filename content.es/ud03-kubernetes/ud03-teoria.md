@@ -4,13 +4,19 @@ weight: 1
 bookToc: true
 ---
 
-# UD03 · Orquestación de contenedores con Kubernetes
+# UD03 · Orquproducto de contenedores con Kubernetes
 
 ## Resumen del tema
 
 Un **orquestador** gestiona contenedores en un **conjunto de máquinas** como si fueran una sola: decide en qué nodo se ejecuta cada contenedor, lo reinicia si falla, lo mueve si cae un nodo, reparte el tráfico, actualiza versiones sin corte y escala según la carga. **Kubernetes** (K8s) es el orquestador estándar de la industria. La idea clave de la unidad: en Kubernetes **no das órdenes, declaras el estado deseado**, y el clúster trabaja sin descanso para que el estado real coincida con él.
 
 {{< ra "RA4:a,b,c,d,e,f,g,h,i" >}}
+
+
+{{< figura src="ud03/estado-deseado.svg" alt="Estado deseado frente a estado real" caption="Declaras cuántas réplicas quieres; Kubernetes trabaja sin parar para que la realidad coincida." >}}
+
+> [!TIP]
+> **Desde cero.** si Docker es cocinar un plato en tu cocina, **Kubernetes** es dirigir la cocina de un restaurante con varios fogones (los nodos): tú escribes el menú —lo que quieres— y el jefe de cocina se encarga de que siempre haya el número de platos pedidos, aunque se estropee un fogón.
 
 ### Objetivos de aprendizaje
 
@@ -144,7 +150,7 @@ flowchart LR
 ```bash
 kubectl config get-contexts
 kubectl config use-context kind-curso
-kubectl config set-context --current --namespace=bicialacant
+kubectl config set-context --current --namespace=mitienda
 ```
 
 > [!CAUTION]
@@ -271,7 +277,7 @@ spec:
     spec:
       containers:
         - name: api
-          image: registro.local:5000/bicialacant/api:1.0.0
+          image: registro.local:5000/mitienda/api:1.0.0
 ```
 
 ```mermaid
@@ -288,7 +294,7 @@ Cada cambio en la **plantilla** (imagen, variables, recursos) crea un **ReplicaS
 Diferencias con un Deployment:
 
 - Nombres **estables y ordenados**: `db-0`, `db-1`, `db-2` (no sufijos aleatorios).
-- DNS estable por Pod mediante un **Service *headless*** (`clusterIP: None`): `db-0.db.bicialacant.svc.cluster.local`.
+- DNS estable por Pod mediante un **Service *headless*** (`clusterIP: None`): `db-0.db.mitienda.svc.cluster.local`.
 - Un **volumen propio por réplica** con `volumeClaimTemplates`, que **no se borra** al borrar el Pod.
 - Creación y borrado en orden (0, 1, 2…).
 
@@ -333,7 +339,7 @@ Si cambias un ConfigMap, los ficheros montados como volumen se actualizan solos 
 Tipos: `httpGet`, `tcpSocket`, `exec` y `grpc`.
 
 > [!TIP]
-> La sonda de **liveness** debe comprobar solo el propio proceso, **no sus dependencias**. Si comprueba la base de datos y esta cae, Kubernetes reiniciará todas las réplicas de la API a la vez y empeorará el problema. Las dependencias van en la **readiness**. En BiciAlacant, `/api/info` (liveness) no toca la base de datos y `/api/salud` (readiness) sí.
+> La sonda de **liveness** debe comprobar solo el propio proceso, **no sus dependencias**. Si comprueba la base de datos y esta cae, Kubernetes reiniciará todas las réplicas de la API a la vez y empeorará el problema. Las dependencias van en la **readiness**. En MiTienda, `/api/info` (liveness) no toca la base de datos y `/api/salud` (readiness) sí.
 
 ### 8.2 *Requests* y *limits*
 
@@ -372,7 +378,7 @@ resources:
 | **Canary** | Un porcentaje pequeño del tráfico a la versión nueva | No | Con réplicas o Gateway API |
 
 ```bash
-kubectl set image deployment/api api=registro.local:5000/bicialacant/api:1.1.0
+kubectl set image deployment/api api=registro.local:5000/mitienda/api:1.1.0
 kubectl annotate deployment/api kubernetes.io/change-cause="API 1.1.0: nuevo endpoint"
 kubectl rollout status deployment/api
 kubectl rollout history deployment/api
@@ -501,6 +507,16 @@ kustomize/
   answer: 1
   explain: "Helm tiene versiones de *release* con upgrade y rollback; Kustomize está integrado en kubectl (`apply -k`)."
 {{< /quiz >}}
+
+## Vídeos y recursos para aprender desde cero
+
+{{< recurso tipo="Vídeo" titulo="Curso de Kubernetes desde cero" autor="Pelado Nerd · YouTube (español)" url="https://www.youtube.com/results?search_query=pelado+nerd+curso+kubernetes" desc="La serie más recomendada en español para empezar con K8s." >}}
+{{< recurso tipo="Vídeo" titulo="Kubernetes explicado en 1 hora" autor="TechWorld with Nana · YouTube" url="https://www.youtube.com/results?search_query=techworld+nana+kubernetes+tutorial" desc="Visión general animada de todos los componentes (inglés con subtítulos)." >}}
+{{< recurso tipo="Interactivo" titulo="Escenarios de Kubernetes en el navegador" autor="Killercoda" url="https://killercoda.com/playgrounds/scenario/kubernetes" desc="Un clúster real, gratis y sin instalar nada, para practicar kubectl." >}}
+{{< recurso tipo="Docs" titulo="Tutoriales oficiales de Kubernetes (en español)" autor="kubernetes.io" url="https://kubernetes.io/es/docs/tutorials/" desc="Incluye «Kubernetes Básico», un recorrido interactivo guiado." >}}
+
+> Los enlaces de vídeo abren una búsqueda en YouTube con el autor recomendado: elige el resultado más reciente y claro. Prioriza siempre vídeos de los últimos años, porque las herramientas cambian.
+
 
 ## Referencias
 

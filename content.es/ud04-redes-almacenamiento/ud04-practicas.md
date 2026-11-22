@@ -16,7 +16,7 @@ bookToc: true
 | [4.4 Services y LoadBalancer con MetalLB](#práctica-44--services-y-loadbalancer-con-metallb) | Guiada | ●●○ | 2 | RA5: b, c, e |
 | [4.5 Gateway API con Traefik y HTTPS](#práctica-45--gateway-api-con-traefik-y-https) | Guiada | ●●○ | 2,5 | RA5: d |
 | [4.6 Almacenamiento dinámico con StorageClasses y NFS](#práctica-46--almacenamiento-dinámico-con-storageclasses-y-nfs) | Guiada | ●●○ | 2 | RA5: f, g, h |
-| [4.7 BiciAlacant expuesta y persistente](#práctica-47--bicialacant-expuesta-y-persistente) | Proyecto | ●●● | 1,5 | RA5: c, d, g, h |
+| [4.7 MiTienda expuesta y persistente](#práctica-47--mitienda-expuesta-y-persistente) | Proyecto | ●●● | 1,5 | RA5: c, d, g, h |
 | **Total** | | | **14 h** | |
 
 > [!NOTE]
@@ -206,7 +206,7 @@ Un **clon enlazado** de `ct-lab` llamado `ct-lab2` con IP `192.168.56.14` (cambi
 
 #### Ampliación
 
-Despliega BiciAlacant en el Swarm con `docker stack deploy -c compose.yaml bici` (las imágenes deben estar en el registro privado). ¿Qué partes del `compose.yaml` ignora Swarm y cuáles usa (`deploy:`)?
+Despliega MiTienda en el Swarm con `docker stack deploy -c compose.yaml producto` (las imágenes deben estar en el registro privado). ¿Qué partes del `compose.yaml` ignora Swarm y cuáles usa (`deploy:`)?
 
 ---
 
@@ -544,7 +544,7 @@ Instalar un controlador de entrada, publicar dos aplicaciones por nombre con Gat
 
     ```bash
     openssl req -x509 -newkey rsa:2048 -nodes -days 365 -keyout tls.key -out tls.crt \
-      -subj "/CN=*.local" -addext "subjectAltName=DNS:azul.local,DNS:verde.local,DNS:bicialacant.local"
+      -subj "/CN=*.local" -addext "subjectAltName=DNS:azul.local,DNS:verde.local,DNS:mitienda.local"
     kubectl -n traefik create secret tls comodin-local --cert=tls.crt --key=tls.key
     ```
 
@@ -765,15 +765,15 @@ Crea una `VolumeSnapshotClass` para el CSI de NFS, haz una instantánea del PVC 
 
 ---
 
-## Práctica 4.7 · BiciAlacant expuesta y persistente
+## Práctica 4.7 · MiTienda expuesta y persistente
 
-{{< practica num="4.7" tipo="Proyecto" duracion="1,5 h" nivel="3" ra="RA5: c, d, g, h" entorno="Clúster kubeadm · registro privado · MetalLB · Traefik · NFS" entrega="bicialacant/k8s/ actualizado + docs/04-red-almacenamiento.md · Hito H4" >}}
+{{< practica num="4.7" tipo="Proyecto" duracion="1,5 h" nivel="3" ra="RA5: c, d, g, h" entorno="Clúster kubeadm · registro privado · MetalLB · Traefik · NFS" entrega="mitienda/k8s/ actualizado + docs/04-red-almacenamiento.md · Hito H4" >}}
 
 #### Objetivo
 
-Llevar BiciAlacant al clúster kubeadm usando las imágenes del registro privado, publicarla en `http://bicialacant.local` y `https://bicialacant.local` con Gateway API y demostrar que sus datos sobreviven a la pérdida de un nodo.
+Llevar MiTienda al clúster kubeadm usando las imágenes del registro privado, publicarla en `http://mitienda.local` y `https://mitienda.local` con Gateway API y demostrar que sus datos sobreviven a la pérdida de un nodo.
 
-{{< descarga "recursos/bicialacant/k8s/50-gateway.yaml" >}}
+{{< descarga "recursos/mitienda/k8s/50-gateway.yaml" >}}
 
 #### Enunciado
 
@@ -791,20 +791,20 @@ Llevar BiciAlacant al clúster kubeadm usando las imágenes del registro privado
     sudo systemctl restart containerd
     ```
 
-    Crea el Secret de credenciales en el espacio `bicialacant` y asígnalo a la cuenta de servicio `default` (`kubectl patch serviceaccount default -p '{"imagePullSecrets":[{"name":"registro-cred"}]}'`). Cambia las imágenes de `30-api.yaml` y `40-web.yaml` por las del registro.
+    Crea el Secret de credenciales en el espacio `mitienda` y asígnalo a la cuenta de servicio `default` (`kubectl patch serviceaccount default -p '{"imagePullSecrets":[{"name":"registro-cred"}]}'`). Cambia las imágenes de `30-api.yaml` y `40-web.yaml` por las del registro.
 
 2. **Almacenamiento.** La base de datos debe usar la clase `nfs` (añade `storageClassName: nfs` al `volumeClaimTemplates`) y la caché un PVC `local-path` en lugar de `emptyDir`. Justifica en el documento por qué cada una.
 
-3. **Exposición.** Instala Traefik en el clúster kubeadm con `service.type=LoadBalancer` (MetalLB le dará una IP del rango) y aplica `50-gateway.yaml` añadiendo el *listener* HTTPS con un certificado para `bicialacant.local`. Apunta `bicialacant.local` a esa IP en el `/etc/hosts` de tu anfitrión.
+3. **Exposición.** Instala Traefik en el clúster kubeadm con `service.type=LoadBalancer` (MetalLB le dará una IP del rango) y aplica `50-gateway.yaml` añadiendo el *listener* HTTPS con un certificado para `mitienda.local`. Apunta `mitienda.local` a esa IP en el `/etc/hosts` de tu anfitrión.
 
 4. **Pruebas que debes documentar:**
-    - `curl -k https://bicialacant.local/api/salud` y la web en el navegador.
-    - Alquila tres bicis. **Apaga el nodo donde está `db-0`** desde VirtualBox. Espera a que Kubernetes lo reprograme (o fuérzalo con `kubectl delete pod db-0 --force --grace-period=0` tras ver el nodo `NotReady`) y comprueba que las bicis alquiladas siguen alquiladas.
+    - `curl -k https://mitienda.local/api/salud` y la web en el navegador.
+    - Compra tres unidades. **Apaga el nodo donde está `db-0`** desde VirtualBox. Espera a que Kubernetes lo reprograme (o fuérzalo con `kubectl delete pod db-0 --force --grace-period=0` tras ver el nodo `NotReady`) y comprueba que los productos comprados siguen descontados del stock.
     - Borra todo el espacio de nombres excepto los PV, vuelve a desplegar y comprueba que los datos se recuperan (pista: con `Retain` tendrás que reutilizar el PV `Released` o recuperar la carpeta NFS).
 
 #### Comprobación
 
 - [ ] Los Pods tiran las imágenes de `registro.local:5000` (`kubectl describe pod` → `Pulled`).
-- [ ] `https://bicialacant.local` responde a través de la IP de MetalLB.
+- [ ] `https://mitienda.local` responde a través de la IP de MetalLB.
 - [ ] Tras apagar el nodo de la base de datos, los datos siguen ahí.
 - [ ] El documento explica el recorrido de una petición: navegador → IP de MetalLB → Service de Traefik → Gateway → HTTPRoute → Service `web` → Pod `web` → Service `api` → Pod `api` → Service `db` → `db-0` → volumen NFS.

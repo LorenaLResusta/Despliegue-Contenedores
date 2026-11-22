@@ -18,7 +18,7 @@ En estas prácticas **desmontas un contenedor** pieza a pieza: lo comparas con u
 | [1.4 Capas y copia en escritura con OverlayFS](#práctica-14--capas-y-copia-en-escritura-con-overlayfs) | Guiada | ●●○ | 1,5 | RA1: d |
 | [1.5 Un contenedor artesanal](#práctica-15--un-contenedor-artesanal) | Reto | ●●● | 2 | RA1: b, c, d, g |
 | [1.6 Informe: ¿VM o contenedor?](#práctica-16--informe-vm-o-contenedor) | Autónoma | ●○○ | 0,5 | RA1: e, f |
-| [Tarea del proyecto · Análisis de BiciAlacant](#tarea-del-proyecto--análisis-de-bicialacant) | Proyecto | ●●○ | 0,5 | RA1: f |
+| [Tarea del proyecto · Análisis de MiTienda](#tarea-del-proyecto--análisis-de-mitienda) | Proyecto | ●●○ | 0,5 | RA1: f |
 | **Total** | | | **10 h** | |
 
 ## Preparación
@@ -470,7 +470,7 @@ Para cada caso, decide **máquina virtual**, **contenedor** o **contenedor dentr
 3. Una *startup* despliega su API 15 veces al día y el tráfico se multiplica por 10 los domingos.
 4. Un proveedor de alojamiento quiere vender «servidores» a clientes desconocidos que tendrán `root`.
 5. El departamento de I+D necesita probar un módulo de núcleo nuevo para una tarjeta de red.
-6. El ayuntamiento quiere modernizar **BiciAlacant** ([proyecto](/guia/proyecto-bicialacant/)).
+6. El ayuntamiento quiere modernizar **MiTienda** ([proyecto](/guia/proyecto-mitienda/)).
 
 Añade una tabla final con los **componentes OCI** (motor, *runtime* de alto nivel, *runtime* de bajo nivel, formato de imagen, registro) que usarías en el caso 3.
 
@@ -480,13 +480,13 @@ Decisión correcta y argumentada (60 %) · uso preciso del vocabulario (30 %) ·
 
 ---
 
-## Tarea del proyecto · Análisis de BiciAlacant
+## Tarea del proyecto · Análisis de MiTienda
 
-{{< practica num="P1" tipo="Proyecto" duracion="0,5 h" nivel="2" ra="RA1: f" entorno="—" entrega="bicialacant/docs/01-analisis.md" >}}
+{{< practica num="P1" tipo="Proyecto" duracion="0,5 h" nivel="2" ra="RA1: f" entorno="—" entrega="mitienda/docs/01-analisis.md" >}}
 
 #### Enunciado
 
-Lee la descripción del [proyecto BiciAlacant](/guia/proyecto-bicialacant/) y redacta el documento de análisis:
+Lee la descripción del [proyecto MiTienda](/guia/proyecto-mitienda/) y redacta el documento de análisis:
 
 1. **Inventario de componentes**: para cada servicio, imagen base, puerto, si tiene estado y qué datos guarda.
 2. **Dependencias**: qué servicio necesita a cuál y qué pasa si cae cada uno.

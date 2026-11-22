@@ -3,7 +3,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: cache
-  namespace: bicialacant
+  namespace: mitienda
 spec:
   selector: {app: cache}
   ports:
@@ -13,7 +13,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: cache
-  namespace: bicialacant
+  namespace: mitienda
 spec:
   replicas: 1
   selector:

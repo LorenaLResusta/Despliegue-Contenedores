@@ -3,35 +3,36 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>BiciAlacant</title>
+  <title>MiTienda</title>
   <style>
     body { font-family: system-ui, sans-serif; max-width: 52rem; margin: 2rem auto; padding: 0 1rem; color: #1d2a36; }
     h1 { color: #0b6e8a; } table { border-collapse: collapse; width: 100%; }
     td, th { border-bottom: 1px solid #ddd; padding: .5rem; text-align: left; }
     button { background: #0b6e8a; color: #fff; border: 0; padding: .35rem .8rem; border-radius: .3rem; cursor: pointer; }
+    button:disabled { background: #9bb; cursor: default; }
     .pie { color: #667; font-size: .9rem; margin-top: 2rem; }
   </style>
 </head>
 <body>
-  <h1>🚲 BiciAlacant</h1>
-  <p>Estaciones de bicicletas de la ciudad. Pulsa «Alquilar» para coger una bici.</p>
+  <h1>🛒 MiTienda</h1>
+  <p>Catálogo de la tienda. Pulsa «Comprar» para llevarte una unidad.</p>
   <table>
-    <thead><tr><th>Estación</th><th>Barrio</th><th>Bicis libres</th><th></th></tr></thead>
-    <tbody id="estaciones"><tr><td colspan="4">Cargando…</td></tr></tbody>
+    <thead><tr><th>Producto</th><th>Categoría</th><th>Precio</th><th>Stock</th><th></th></tr></thead>
+    <tbody id="productos"><tr><td colspan="5">Cargando…</td></tr></tbody>
   </table>
   <p class="pie" id="pie"></p>
   <script>
     async function cargar() {
-      const tb = document.getElementById('estaciones');
+      const tb = document.getElementById('productos');
       try {
-        const r = await fetch('/api/estaciones');
+        const r = await fetch('/api/productos');
         if (!r.ok) throw new Error(r.status);
         const datos = await r.json();
-        tb.innerHTML = datos.map(e =>
-          `<tr><td>${e.nombre}</td><td>${e.barrio}</td><td>${e.bicis_libres}</td>
-           <td><button onclick="alquilar(${e.id})">Alquilar</button></td></tr>`).join('');
+        tb.innerHTML = datos.map(p =>
+          `<tr><td>${p.nombre}</td><td>${p.categoria}</td><td>${p.precio.toFixed(2)} €</td><td>${p.stock}</td>
+           <td><button onclick="comprar(${p.id})" ${p.stock ? '' : 'disabled'}>Comprar</button></td></tr>`).join('');
       } catch (err) {
-        tb.innerHTML = `<tr><td colspan="4">No se puede contactar con la API (${err.message}).</td></tr>`;
+        tb.innerHTML = `<tr><td colspan="5">No se puede contactar con la API (${err.message}).</td></tr>`;
       }
       try {
         const i = await (await fetch('/api/info')).json();
@@ -40,8 +41,8 @@
           `API v${i.version} · respondió el contenedor ${i.contenedor} · visitas: ${v.visitas ?? '—'}`;
       } catch (e) { /* la caché puede no estar disponible */ }
     }
-    async function alquilar(id) {
-      const r = await fetch(`/api/alquiler/${id}`, { method: 'POST' });
+    async function comprar(id) {
+      const r = await fetch(`/api/comprar/${id}`, { method: 'POST' });
       if (!r.ok) alert((await r.json()).error);
       cargar();
     }

@@ -2,8 +2,8 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: bicialacant
+  name: mitienda
   labels:
-    app.kubernetes.io/part-of: bicialacant
+    app.kubernetes.io/part-of: mitienda
     pod-security.kubernetes.io/enforce: restricted
     pod-security.kubernetes.io/warn: restricted

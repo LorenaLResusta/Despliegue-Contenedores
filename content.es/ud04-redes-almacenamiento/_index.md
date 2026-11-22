@@ -12,6 +12,6 @@ Una aplicación en contenedores tiene que **hablar** (con otros servicios y con 
 | Página | Contenido |
 |---|---|
 | [Teoría](/ud04-redes-almacenamiento/ud04-teoria/) | Redes de Docker (bridge, host, none, macvlan, overlay), DNS interno, modelo de red de Kubernetes y CNI, Services, DNS, Ingress, Gateway API, volúmenes de Docker, almacenamiento en Kubernetes (efímero, PV, PVC, StorageClass, CSI, modos de acceso) (6 h) |
-| [Prácticas](/ud04-redes-almacenamiento/ud04-practicas/) | Siete prácticas: redes de Docker, macvlan y overlay, volúmenes, Services con MetalLB, Gateway API con Traefik y HTTPS, almacenamiento dinámico con NFS y BiciAlacant expuesta y persistente (14 h) |
+| [Prácticas](/ud04-redes-almacenamiento/ud04-practicas/) | Siete prácticas: redes de Docker, macvlan y overlay, volúmenes, Services con MetalLB, Gateway API con Traefik y HTTPS, almacenamiento dinámico con NFS y MiTienda expuesta y persistente (14 h) |
 
-**Duración:** 20 horas (6 h de teoría y 14 h de prácticas). **Hito H4:** BiciAlacant accesible por nombre y con datos persistentes.
+**Duración:** 20 horas (6 h de teoría y 14 h de prácticas). **Hito H4:** MiTienda accesible por nombre y con datos persistentes.
