@@ -4,7 +4,7 @@ weight: 1
 bookToc: true
 ---
 
-# UD03 · Orquestación de contenedores con Kubernetes
+# UD03 · Orquproducto de contenedores con Kubernetes
 
 ## Resumen del tema
 
@@ -144,7 +144,7 @@ flowchart LR
 ```bash
 kubectl config get-contexts
 kubectl config use-context kind-curso
-kubectl config set-context --current --namespace=bicialacant
+kubectl config set-context --current --namespace=mitienda
 ```
 
 > [!CAUTION]
@@ -271,7 +271,7 @@ spec:
     spec:
       containers:
         - name: api
-          image: registro.local:5000/bicialacant/api:1.0.0
+          image: registro.local:5000/mitienda/api:1.0.0
 ```
 
 ```mermaid
@@ -288,7 +288,7 @@ Cada cambio en la **plantilla** (imagen, variables, recursos) crea un **ReplicaS
 Diferencias con un Deployment:
 
 - Nombres **estables y ordenados**: `db-0`, `db-1`, `db-2` (no sufijos aleatorios).
-- DNS estable por Pod mediante un **Service *headless*** (`clusterIP: None`): `db-0.db.bicialacant.svc.cluster.local`.
+- DNS estable por Pod mediante un **Service *headless*** (`clusterIP: None`): `db-0.db.mitienda.svc.cluster.local`.
 - Un **volumen propio por réplica** con `volumeClaimTemplates`, que **no se borra** al borrar el Pod.
 - Creación y borrado en orden (0, 1, 2…).
 
@@ -333,7 +333,7 @@ Si cambias un ConfigMap, los ficheros montados como volumen se actualizan solos 
 Tipos: `httpGet`, `tcpSocket`, `exec` y `grpc`.
 
 > [!TIP]
-> La sonda de **liveness** debe comprobar solo el propio proceso, **no sus dependencias**. Si comprueba la base de datos y esta cae, Kubernetes reiniciará todas las réplicas de la API a la vez y empeorará el problema. Las dependencias van en la **readiness**. En BiciAlacant, `/api/info` (liveness) no toca la base de datos y `/api/salud` (readiness) sí.
+> La sonda de **liveness** debe comprobar solo el propio proceso, **no sus dependencias**. Si comprueba la base de datos y esta cae, Kubernetes reiniciará todas las réplicas de la API a la vez y empeorará el problema. Las dependencias van en la **readiness**. En MiTienda, `/api/info` (liveness) no toca la base de datos y `/api/salud` (readiness) sí.
 
 ### 8.2 *Requests* y *limits*
 
@@ -372,7 +372,7 @@ resources:
 | **Canary** | Un porcentaje pequeño del tráfico a la versión nueva | No | Con réplicas o Gateway API |
 
 ```bash
-kubectl set image deployment/api api=registro.local:5000/bicialacant/api:1.1.0
+kubectl set image deployment/api api=registro.local:5000/mitienda/api:1.1.0
 kubectl annotate deployment/api kubernetes.io/change-cause="API 1.1.0: nuevo endpoint"
 kubectl rollout status deployment/api
 kubectl rollout history deployment/api

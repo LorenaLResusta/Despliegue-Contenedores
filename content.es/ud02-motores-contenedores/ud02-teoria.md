@@ -209,7 +209,7 @@ Un contenedor que no arranca se diagnostica siempre en el mismo orden:
 ### 4.1 Nombre completo de una imagen
 
 ```text
-registro.local:5000/bicialacant/api:1.2.0@sha256:4f3c...
+registro.local:5000/mitienda/api:1.2.0@sha256:4f3c...
 └────── registro ─────┘└─ repositorio ─┘└tag┘└──── digest ────┘
 ```
 
@@ -245,9 +245,9 @@ Con **versionado semántico** (MAYOR.MENOR.PARCHE) se publican varias etiquetas 
 
 ```bash
 docker login registro.local:5000
-docker tag bicialacant-api:1.0.0 registro.local:5000/bicialacant/api:1.0.0
-docker push registro.local:5000/bicialacant/api:1.0.0
-docker pull registro.local:5000/bicialacant/api:1.0.0
+docker tag mitienda-api:1.0.0 registro.local:5000/mitienda/api:1.0.0
+docker push registro.local:5000/mitienda/api:1.0.0
+docker pull registro.local:5000/mitienda/api:1.0.0
 ```
 
 ---
@@ -385,7 +385,7 @@ volumes:
 |---|---|
 | `docker compose up -d [--build]` | Crea y arranca todo (reconstruye si se pide) |
 | `docker compose ps` / `logs -f api` | Estado / registros |
-| `docker compose exec db psql -U bici` | Entra en un servicio |
+| `docker compose exec db psql -U producto` | Entra en un servicio |
 | `docker compose up -d --scale api=3` | Varias réplicas de un servicio (sin puerto fijo publicado) |
 | `docker compose config` | Muestra el fichero final con variables resueltas (valida la sintaxis) |
 | `docker compose down` | Para y borra contenedores y redes |
@@ -407,7 +407,7 @@ La **misma imagen** debe servir para desarrollo, pruebas y producción. Lo que c
 | Ficheros montados (`configs`, `-v ./app.conf:/etc/app.conf:ro`) | Ficheros de configuración | — |
 | **Secretos de Compose** (`secrets:`) | Contraseñas, claves | Se montan en `/run/secrets/<nombre>` como fichero, no como variable |
 
-Muchas imágenes oficiales aceptan la variante `_FILE` de sus variables: `POSTGRES_PASSWORD_FILE=/run/secrets/db_password`. La API de BiciAlacant hace lo mismo con `DB_PASSWORD_FILE`.
+Muchas imágenes oficiales aceptan la variante `_FILE` de sus variables: `POSTGRES_PASSWORD_FILE=/run/secrets/db_password`. La API de MiTienda hace lo mismo con `DB_PASSWORD_FILE`.
 
 ---
 

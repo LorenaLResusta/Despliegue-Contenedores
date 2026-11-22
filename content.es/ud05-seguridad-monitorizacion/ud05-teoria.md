@@ -118,7 +118,7 @@ Kubernetes **no tiene objetos de usuario**. Un usuario humano se identifica con 
 ```yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
-metadata: {name: desarrollador, namespace: bicialacant}
+metadata: {name: desarrollador, namespace: mitienda}
 rules:
   - apiGroups: ["", "apps"]
     resources: ["pods", "pods/log", "deployments", "services", "configmaps"]
@@ -126,13 +126,13 @@ rules:
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
-metadata: {name: ana-desarrolladora, namespace: bicialacant}
+metadata: {name: ana-desarrolladora, namespace: mitienda}
 subjects:
   - {kind: User, name: ana, apiGroup: rbac.authorization.k8s.io}
 roleRef: {kind: Role, name: desarrollador, apiGroup: rbac.authorization.k8s.io}
 ```
 
-RBAC solo **permite** (no hay reglas de denegación): lo que no se concede está prohibido. Comprobación: `kubectl auth can-i delete pods -n bicialacant --as ana`.
+RBAC solo **permite** (no hay reglas de denegación): lo que no se concede está prohibido. Comprobación: `kubectl auth can-i delete pods -n mitienda --as ana`.
 
 > [!CAUTION]
 > Permisos especialmente peligrosos: `secrets` (leer contraseñas), `pods/exec` (ejecutar en cualquier Pod), crear Pods (montar cualquier Secret o `hostPath`), `escalate`/`bind`/`impersonate`, y cualquier `*`. Ten cuidado también con la ClusterRole `cluster-admin`: un `ClusterRoleBinding` a ella es la llave maestra.
@@ -230,14 +230,14 @@ flowchart LR
 ```
 
 - Modelo ***pull***: Prometheus **consulta** (*scrape*) cada 15-30 s el endpoint `/metrics` de cada objetivo.
-- Las series tienen **nombre y etiquetas**: `container_memory_working_set_bytes{namespace="bicialacant", pod="api-7d9f-x2", container="api"}`.
+- Las series tienen **nombre y etiquetas**: `container_memory_working_set_bytes{namespace="mitienda", pod="api-7d9f-x2", container="api"}`.
 - Se consultan con **PromQL**:
 
 | Consulta | Significado |
 |---|---|
 | `up{job="apiserver"}` | ¿Está disponible el objetivo? (1/0) |
-| `sum by (pod) (rate(container_cpu_usage_seconds_total{namespace="bicialacant"}[5m]))` | CPU por Pod |
-| `sum by (pod) (container_memory_working_set_bytes{namespace="bicialacant", container!=""})` | Memoria por Pod |
+| `sum by (pod) (rate(container_cpu_usage_seconds_total{namespace="mitienda"}[5m]))` | CPU por Pod |
+| `sum by (pod) (container_memory_working_set_bytes{namespace="mitienda", container!=""})` | Memoria por Pod |
 | `kube_deployment_status_replicas_available{deployment="api"}` | Réplicas disponibles |
 | `increase(kube_pod_container_status_restarts_total[1h]) > 3` | Contenedores que reinician mucho |
 
@@ -247,19 +247,19 @@ flowchart LR
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
-  name: bicialacant
+  name: mitienda
   namespace: monitorizacion
   labels: {release: kps}
 spec:
   groups:
-    - name: bicialacant
+    - name: mitienda
       rules:
         - alert: APISinReplicas
-          expr: kube_deployment_status_replicas_available{namespace="bicialacant", deployment="api"} < 1
+          expr: kube_deployment_status_replicas_available{namespace="mitienda", deployment="api"} < 1
           for: 1m
           labels: {severity: critical}
           annotations:
-            summary: "BiciAlacant: la API no tiene réplicas disponibles"
+            summary: "MiTienda: la API no tiene réplicas disponibles"
 ```
 
 ### 8.2 Registros centralizados
@@ -345,7 +345,7 @@ En el laboratorio se usa **Fluent Bit + Loki + Grafana**, porque la pila EFK nec
   options: ["Para cifrar la imagen", "Para conocer exactamente qué paquetes y versiones contiene una imagen y localizar rápidamente las afectadas por una CVE", "Para firmar la imagen", "Para reducir su tamaño"]
   answer: 1
   explain: "El SBOM es el inventario de componentes; se genera al construir y se guarda junto a la imagen."
-- q: "En RBAC, ¿qué objeto asigna un Role a la ServiceAccount `monitor` en el espacio `bicialacant`?"
+- q: "En RBAC, ¿qué objeto asigna un Role a la ServiceAccount `monitor` en el espacio `mitienda`?"
   options: ["ClusterRole", "RoleBinding", "NetworkPolicy", "ResourceQuota"]
   answer: 1
   explain: "El RoleBinding une sujetos (usuarios, grupos, ServiceAccounts) con un Role dentro de un espacio de nombres."

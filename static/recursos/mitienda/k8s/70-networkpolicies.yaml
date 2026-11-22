@@ -4,7 +4,7 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: denegar-todo
-  namespace: bicialacant
+  namespace: mitienda
 spec:
   podSelector: {}
   policyTypes: [Ingress, Egress]
@@ -14,7 +14,7 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: permitir-dns
-  namespace: bicialacant
+  namespace: mitienda
 spec:
   podSelector: {}
   policyTypes: [Egress]
@@ -33,7 +33,7 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: web
-  namespace: bicialacant
+  namespace: mitienda
 spec:
   podSelector:
     matchLabels: {app: web}
@@ -53,7 +53,7 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: api
-  namespace: bicialacant
+  namespace: mitienda
 spec:
   podSelector:
     matchLabels: {app: api}
@@ -75,7 +75,7 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: datos
-  namespace: bicialacant
+  namespace: mitienda
 spec:
   podSelector:
     matchLabels: {tier: datos}

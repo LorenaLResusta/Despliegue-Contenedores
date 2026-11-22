@@ -12,7 +12,7 @@ El curso dura **120 horas**. Aproximadamente un **30 %** es teoría (explicació
 |---|--:|--:|--:|---|
 | [UD01 · Introducción y virtualización ligera](/ud01-virtualizacion-ligera/) | 5 h | 10 h | **15 h** | RA1 |
 | [UD02 · Motores de contenedores](/ud02-motores-contenedores/) | 8 h | 17 h | **25 h** | RA2, RA3 |
-| [UD03 · Orquestación con Kubernetes](/ud03-kubernetes/) | 11 h | 24 h | **35 h** | RA4 |
+| [UD03 · Orquproducto con Kubernetes](/ud03-kubernetes/) | 11 h | 24 h | **35 h** | RA4 |
 | [UD04 · Redes y almacenamiento](/ud04-redes-almacenamiento/) | 6 h | 14 h | **20 h** | RA5 |
 | [UD05 · Seguridad, monitorización y buenas prácticas](/ud05-seguridad-monitorizacion/) | 7 h | 18 h | **25 h** | RA6 |
 | **Total** | **37 h** | **83 h** | **120 h** | |
@@ -40,7 +40,7 @@ gantt
 2. **Teoría por bloques**: cada bloque termina con una demostración en directo y con un ejemplo que puedes repetir en tu máquina.
 3. **Prácticas guiadas**: en el laboratorio, con la lista de comprobación al final de cada sesión.
 4. **Prácticas autónomas y retos**: aplicas la técnica sin el procedimiento escrito.
-5. **Tarea del proyecto BiciAlacant**: integra lo aprendido en la aplicación común.
+5. **Tarea del proyecto MiTienda**: integra lo aprendido en la aplicación común.
 6. **Autoevaluación** de la teoría y prueba de la unidad.
 
 ## Hitos
@@ -48,8 +48,8 @@ gantt
 | Hito | Cuándo | Qué se comprueba |
 |---|---|---|
 | H1 · Laboratorio listo | Final de la primera semana | VM de Debian 13 con instantánea limpia y acceso SSH ([entorno](/guia/entorno/)) |
-| H2 · BiciAlacant con Compose | Final de la UD02 | La aplicación arranca con `docker compose up` y sobrevive a la caída de la API |
-| H3 · BiciAlacant en Kubernetes | Final de la UD03 | Despliegue declarativo, actualización progresiva y vuelta atrás |
+| H2 · MiTienda con Compose | Final de la UD02 | La aplicación arranca con `docker compose up` y sobrevive a la caída de la API |
+| H3 · MiTienda en Kubernetes | Final de la UD03 | Despliegue declarativo, actualización progresiva y vuelta atrás |
 | H4 · Expuesta y persistente | Final de la UD04 | Acceso por nombre a través del Gateway y datos que sobreviven al borrado del Pod |
 | H5 · Práctica final | Final de la UD05 | Alta disponibilidad, seguridad, monitorización y simulacro de fallos con informe |
 

@@ -15,7 +15,7 @@ content.es/
 └── ud05-seguridad-monitorizacion/    _index · ud05-teoria · ud05-practicas (incluye la práctica final)
 data/curriculo.yaml                   RA y CE (propuesta; sustituir si hay texto oficial)
 layouts/_shortcodes/                  practica, ra, quiz, descarga, figura, sw
-static/recursos/bicialacant/          código del proyecto: API, web, SQL, compose.yaml y manifiestos k8s/
+static/recursos/mitienda/          código del proyecto: API, web, SQL, compose.yaml y manifiestos k8s/
 ```
 
 ## Prácticas
@@ -27,7 +27,7 @@ Cada práctica empieza con la ficha `{{< practica ... >}}` (número, tipo, durac
 | Guiada | Procedimiento paso a paso; no se entrega |
 | Autónoma | Sin procedimiento; se entrega |
 | Reto | Problema abierto; opcional o para subir nota |
-| Proyecto | Tarea de BiciAlacant de cada unidad; la 5.8 es la práctica final |
+| Proyecto | Tarea de MiTienda de cada unidad; la 5.8 es la práctica final |
 
 ## Uso local
 

@@ -5,7 +5,7 @@ weight: 50
 
 # UD05 · Seguridad, monitorización y buenas prácticas
 
-Una plataforma que funciona no es una plataforma lista para producción. Falta que sea **segura** (contenedores sin privilegios, imágenes sin vulnerabilidades conocidas, permisos mínimos, tráfico restringido), **observable** (métricas, paneles, alertas y registros centralizados) y **resistente** (alta disponibilidad comprobada con simulacros). Esta unidad cierra el curso con la **práctica final**: BiciAlacant en alta disponibilidad, defendida ante un simulacro de fallos.
+Una plataforma que funciona no es una plataforma lista para producción. Falta que sea **segura** (contenedores sin privilegios, imágenes sin vulnerabilidades conocidas, permisos mínimos, tráfico restringido), **observable** (métricas, paneles, alertas y registros centralizados) y **resistente** (alta disponibilidad comprobada con simulacros). Esta unidad cierra el curso con la **práctica final**: MiTienda en alta disponibilidad, defendida ante un simulacro de fallos.
 
 {{< ra "RA6:a,b,c,d,e,f,g,h,i" "RA4:g,h" >}}
 

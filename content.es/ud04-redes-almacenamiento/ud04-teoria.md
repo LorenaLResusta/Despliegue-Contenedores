@@ -55,7 +55,7 @@ flowchart TB
 | Conectar/desconectar en caliente | No | Sí (`docker network connect`) |
 | Recomendación | Evitarla | **Siempre** (Compose la crea por ti) |
 
-Un contenedor puede estar en **varias redes** a la vez: así separas el frontal de los datos (como en BiciAlacant, con `frontal` y `datos`). Una red con `--internal` no tiene salida a Internet.
+Un contenedor puede estar en **varias redes** a la vez: así separas el frontal de los datos (como en MiTienda, con `frontal` y `datos`). Una red con `--internal` no tiene salida a Internet.
 
 ### 1.3 Publicar puertos
 
@@ -151,11 +151,11 @@ CoreDNS crea registros para cada Service:
 
 ```text
 <servicio>.<espacio-de-nombres>.svc.cluster.local
-api.bicialacant.svc.cluster.local     → 10.96.12.7
-db-0.db.bicialacant.svc.cluster.local → IP del Pod db-0 (Service headless)
+api.mitienda.svc.cluster.local     → 10.96.12.7
+db-0.db.mitienda.svc.cluster.local → IP del Pod db-0 (Service headless)
 ```
 
-Desde el mismo espacio de nombres basta con `api`; desde otro, `api.bicialacant`. Lo hace posible el `search` de `/etc/resolv.conf` de cada Pod.
+Desde el mismo espacio de nombres basta con `api`; desde otro, `api.mitienda`. Lo hace posible el `search` de `/etc/resolv.conf` de cada Pod.
 
 ### 3.3 MetalLB: LoadBalancer fuera de la nube
 
@@ -204,7 +204,7 @@ Es la evolución de Ingress, diseñada por roles y extensible:
 ```mermaid
 flowchart TB
     GC[GatewayClass<br/>«traefik»<br/>la crea el proveedor] --> G[Gateway «publico»<br/>puertos, TLS, qué rutas acepta<br/>lo gestiona el equipo de plataforma]
-    G --> R1[HTTPRoute bicialacant<br/>host + rutas → Services<br/>lo gestiona el equipo de la aplicación]
+    G --> R1[HTTPRoute mitienda<br/>host + rutas → Services<br/>lo gestiona el equipo de la aplicación]
     G --> R2[HTTPRoute tienda]
     R1 --> S1[Service web]
 ```
@@ -220,10 +220,10 @@ flowchart TB
 ```yaml
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
-metadata: {name: bicialacant, namespace: bicialacant}
+metadata: {name: mitienda, namespace: mitienda}
 spec:
   parentRefs: [{name: publico, namespace: traefik}]
-  hostnames: [bicialacant.local]
+  hostnames: [mitienda.local]
   rules:
     - matches: [{path: {type: PathPrefix, value: /}}]
       backendRefs:
@@ -374,8 +374,8 @@ spec:
   options: ["Un Ingress", "Un implementador de LoadBalancer como MetalLB", "Más réplicas", "Una StorageClass"]
   answer: 1
   explain: "Fuera de la nube nadie atiende la petición de balanceador. MetalLB asigna IP de un rango local."
-- q: "¿Cuál es el nombre DNS completo del Service `api` del espacio de nombres `bicialacant`?"
-  options: ["`api.cluster.local`", "`api.bicialacant.svc.cluster.local`", "`bicialacant.api.svc`", "`api.svc.bicialacant.local`"]
+- q: "¿Cuál es el nombre DNS completo del Service `api` del espacio de nombres `mitienda`?"
+  options: ["`api.cluster.local`", "`api.mitienda.svc.cluster.local`", "`mitienda.api.svc`", "`api.svc.mitienda.local`"]
   answer: 1
   explain: "El formato es `<servicio>.<espacio>.svc.cluster.local`."
 - q: "¿Qué recurso de Gateway API define las reglas de enrutado de una aplicación (host y rutas hacia Services)?"

@@ -17,7 +17,7 @@ bookToc: true
 | [2.5 Imágenes pequeñas con multi-stage](#práctica-25--imágenes-pequeñas-con-multi-stage) | Guiada | ●●○ | 2 | RA3: a, b |
 | [2.6 Registro privado con TLS y autenticación](#práctica-26--registro-privado-con-tls-y-autenticación) | Guiada | ●●○ | 2 | RA3: c, d, e |
 | [2.7 Primera aplicación con Docker Compose](#práctica-27--primera-aplicación-con-docker-compose) | Guiada | ●○○ | 1,5 | RA3: f, g |
-| [2.8 BiciAlacant con Docker Compose](#práctica-28--bicialacant-con-docker-compose) | Proyecto | ●●● | 3 | RA3: a-h |
+| [2.8 MiTienda con Docker Compose](#práctica-28--mitienda-con-docker-compose) | Proyecto | ●●● | 3 | RA3: a-h |
 | [2.9 Depurar un Compose roto](#práctica-29--depurar-un-compose-roto) | Reto | ●●● | 1,5 | RA2: e · RA3: f, h |
 | **Total** | | | **17 h** | |
 
@@ -526,9 +526,9 @@ Reducir el tamaño y la superficie de ataque de una imagen separando construcci�
     docker exec saludo sh || echo "No hay shell en la imagen: menos superficie de ataque"
     ```
 
-5. **Ahora con Python: la API de BiciAlacant.** Descarga los ficheros de `api/` ([entorno](/guia/entorno/#5-recursos-del-proyecto)) y estudia su Dockerfile:
+5. **Ahora con Python: la API de MiTienda.** Descarga los ficheros de `api/` ([entorno](/guia/entorno/#5-recursos-del-proyecto)) y estudia su Dockerfile:
 
-    {{< descarga "recursos/bicialacant/api/Dockerfile" >}}
+    {{< descarga "recursos/mitienda/api/Dockerfile" >}}
 
     Construye la versión *multi-stage* y una versión de una sola etapa a partir de `python:3.13` (no *slim*) y compara tamaños.
 
@@ -552,8 +552,8 @@ Tabla en `ud02/p2.5/README.md`:
 |---|--:|:-:|:-:|---|
 | `saludo:grande` | | | | |
 | `saludo:1.0.0` | | | | |
-| `bicialacant-api` (1 etapa) | | | | |
-| `bicialacant-api:1.0.0` (*multi-stage*) | | | | |
+| `mitienda-api` (1 etapa) | | | | |
+| `mitienda-api:1.0.0` (*multi-stage*) | | | | |
 
 - [ ] La imagen final de Go ocupa menos de 15 MB y se ejecuta como `nonroot`.
 
@@ -767,9 +767,9 @@ Añade un servicio `adminer` solo en el perfil `admin` (`profiles: [admin]`) y a
 
 ---
 
-## Práctica 2.8 · BiciAlacant con Docker Compose
+## Práctica 2.8 · MiTienda con Docker Compose
 
-{{< practica num="2.8" tipo="Proyecto" duracion="3 h" nivel="3" ra="RA3: a-h · RA2: d, e" entorno="Docker Engine · Compose · registry:3" entrega="bicialacant/ (compose.yaml, Dockerfiles, README.md, evidencias/) · Hito H2" >}}
+{{< practica num="2.8" tipo="Proyecto" duracion="3 h" nivel="3" ra="RA3: a-h · RA2: d, e" entorno="Docker Engine · Compose · registry:3" entrega="mitienda/ (compose.yaml, Dockerfiles, README.md, evidencias/) · Hito H2" >}}
 
 #### Objetivo
 
@@ -779,7 +779,7 @@ Contenerizar la aplicación del proyecto completa: construir las imágenes, publ
 
 Prácticas 2.4 a 2.7 y el registro privado de la 2.6 en marcha. Código del proyecto descargado ([entorno](/guia/entorno/#5-recursos-del-proyecto)).
 
-{{< descarga "recursos/bicialacant/compose.yaml" >}}
+{{< descarga "recursos/mitienda/compose.yaml" >}}
 
 #### Desarrollo
 
@@ -788,7 +788,7 @@ Prácticas 2.4 a 2.7 y el registro privado de la 2.6 en marcha. Código del proy
 1. **Secreto de la base de datos** (fuera de Git):
 
     ```bash
-    cd ~/curso/bicialacant
+    cd ~/curso/mitienda
     mkdir -p secrets && openssl rand -base64 24 > secrets/db_password.txt
     chmod 700 secrets && chmod 644 secrets/db_password.txt
     printf 'secrets/\n.env\n' > .gitignore
@@ -804,10 +804,10 @@ Prácticas 2.4 a 2.7 y el registro privado de la 2.6 en marcha. Código del proy
     docker compose up -d
     docker compose ps
     curl -s localhost:8080/api/salud | jq
-    curl -s localhost:8080/api/estaciones | jq '.[0]'
+    curl -s localhost:8080/api/productos | jq '.[0]'
     ```
 
-    Abre `http://ct-lab:8080` en el navegador y alquila una bici.
+    Abre `http://ct-lab:8080` en el navegador y compra un producto.
 
 3. **Comprueba el diseño de red.** La base de datos no debe ser accesible desde `web` ni tener salida a Internet:
 
@@ -820,7 +820,7 @@ Prácticas 2.4 a 2.7 y el registro privado de la 2.6 en marcha. Código del proy
 4. **El secreto no aparece en `inspect`:**
 
     ```bash
-    docker inspect bicialacant-api-1 --format '{{json .Config.Env}}' | jq
+    docker inspect mitienda-api-1 --format '{{json .Config.Env}}' | jq
     docker compose exec api cat /run/secrets/db_password | wc -c
     ```
 
@@ -837,7 +837,7 @@ Prácticas 2.4 a 2.7 y el registro privado de la 2.6 en marcha. Código del proy
 6. **Prueba de fallo.** Mata la API y la base de datos y observa la recuperación:
 
     ```bash
-    docker kill bicialacant-api-1
+    docker kill mitienda-api-1
     docker compose ps                         # vuelve a arrancar por la política de reinicio
     docker compose stop db
     curl -s -o /dev/null -w '%{http_code}\n' localhost:8080/api/salud   # 503
@@ -845,14 +845,14 @@ Prácticas 2.4 a 2.7 y el registro privado de la 2.6 en marcha. Código del proy
     curl -s localhost:8080/api/salud | jq     # vuelve a «ok»
     ```
 
-7. **Persistencia.** `docker compose down` + `up -d`: las bicis alquiladas siguen alquiladas. Explica por qué el contador de visitas también se conserva (pista: `--appendonly yes` y el volumen `datos-cache`).
+7. **Persistencia.** `docker compose down` + `up -d`: los productos comprados siguen descontados del stock. Explica por qué el contador de visitas también se conserva (pista: `--appendonly yes` y el volumen `datos-cache`).
 
-8. **Publica las imágenes en el registro privado** con etiquetas semánticas y cambia el `compose.yaml` para usar `image: registro.local:5000/bicialacant/api:1.0.0` (y lo mismo para `web`):
+8. **Publica las imágenes en el registro privado** con etiquetas semánticas y cambia el `compose.yaml` para usar `image: registro.local:5000/mitienda/api:1.0.0` (y lo mismo para `web`):
 
     ```bash
     for s in api web; do
-      docker tag bicialacant-$s:1.0.0 registro.local:5000/bicialacant/$s:1.0.0
-      docker push registro.local:5000/bicialacant/$s:1.0.0
+      docker tag mitienda-$s:1.0.0 registro.local:5000/mitienda/$s:1.0.0
+      docker push registro.local:5000/mitienda/$s:1.0.0
     done
     ```
 

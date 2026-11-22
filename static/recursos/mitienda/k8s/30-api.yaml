@@ -1,9 +1,9 @@
-# API de BiciAlacant: Deployment con 3 réplicas, sondas y actualización progresiva
+# API de MiTienda: Deployment con 3 réplicas, sondas y actualización progresiva
 apiVersion: v1
 kind: Service
 metadata:
   name: api
-  namespace: bicialacant
+  namespace: mitienda
 spec:
   selector: {app: api}
   ports:
@@ -14,7 +14,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: api
-  namespace: bicialacant
+  namespace: mitienda
   labels: {app: api}
 spec:
   replicas: 3
@@ -34,9 +34,9 @@ spec:
         seccompProfile: {type: RuntimeDefault}
       containers:
         - name: api
-          # En kind: kind load docker-image bicialacant-api:1.0.0 --name curso
+          # En kind: kind load docker-image mitienda-api:1.0.0 --name curso
           # En kubeadm: sustitúyela por la del registro privado (registro.local:5000/...)
-          image: bicialacant-api:1.0.0
+          image: mitienda-api:1.0.0
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8000

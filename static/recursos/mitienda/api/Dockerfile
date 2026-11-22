@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-# Imagen de la API de BiciAlacant (construcción en dos etapas)
+# Imagen de la API de MiTienda (construcción en dos etapas)
 
 # ---- Etapa 1: dependencias ----
 FROM python:3.13-slim AS deps
@@ -9,8 +9,8 @@ RUN pip install --no-cache-dir --prefix=/install -r requirements.txt
 
 # ---- Etapa 2: ejecución ----
 FROM python:3.13-slim
-LABEL org.opencontainers.image.title="bicialacant-api" \
-      org.opencontainers.image.description="API de alquiler de bicicletas (curso de contenedores)"
+LABEL org.opencontainers.image.title="mitienda-api" \
+      org.opencontainers.image.description="API de la tienda de ejemplo (curso de contenedores)"
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     APP_VERSION=1.0.0
